@@ -7,6 +7,7 @@ module.exports = {
     coverageReporters: ['lcov', 'text', 'cobertura'],
     coveragePathIgnorePatterns: ['/node_modules/', '/test/'],
     testPathIgnorePatterns: ['/lib/'],
+    testMatch: ['**/src/**/*.spec.ts'],
     globals: {
         window: {
             location: {
