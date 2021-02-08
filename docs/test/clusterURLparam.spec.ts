@@ -1,19 +1,16 @@
+jest.setTimeout(50000);
 
-// const url = 'http://localhost:9000/en/?link=http://thoughtspot.com';
+describe('Navigation to URL param in Query:', () => {
+    const link = 'https://www.thoughtspot.com';
 
-jest.setTimeout(30000)
-
-describe('Google', () => {
     beforeAll(async () => {
-        await page.goto(`${URL}?link=https://wwww.thoughtspot.com`);
+        await page.goto(`${URL}?link=${link}`, {
+            waitUntil: 'networkidle2',
+        });
     });
 
-    it('should navigate to new page', async () => {
-        await expect(page).toClick('a', { text: 'click me' });
-        await page.waitForNavigation();
-
-        const pageUrl = page.url();
-
-        expect(pageUrl).toMatch('https://www.thoughtspot.com/');
+    it('should contain a tag with link', async () => {
+        const selectedElement = await page.$(`a[href="${link}"]`);
+        expect(selectedElement).not.toBeNull();
     });
 });
