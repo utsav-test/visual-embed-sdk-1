@@ -12,7 +12,8 @@
         "watch": "rollup -cw",
         "docs-cmd": "node scripts/gatsby-commands.js",
         "test": "jest -c jest.config.js",
-        "test:e2e": "jest -c jest-e2e.config.js"
+        "test:e2e": "npm run test:e2e-doc",
+        "test:e2e-doc": "jest -c jest-e2e.config.js"
     },
     "dependencies": {},
     "devDependencies": {
