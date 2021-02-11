@@ -8,15 +8,22 @@
  * @author Ayon Ghosh <ayon.ghosh@thoughtspot.com>
  */
 
-import { Action, Param, RuntimeFilter } from '../types';
+import {
+    Action,
+    EventTypeV1,
+    MessagePayload,
+    Param,
+    RuntimeFilter,
+} from '../types';
 import { getFilterQuery, getQueryParamString } from '../utils';
 import { V1Embed, ViewConfig } from './base';
 
 export interface PinboardViewConfig extends ViewConfig {
     fullHeight?: boolean;
     disabledActions?: Action[];
-    disabledActionReason: string;
+    disabledActionReason?: string;
     hiddenActions?: Action[];
+    enableVizTransformations?: boolean;
 }
 
 export interface PinboardRenderOptions {
@@ -41,6 +48,7 @@ export class PinboardEmbed extends V1Embed {
             disabledActions,
             disabledActionReason,
             hiddenActions,
+            enableVizTransformations,
         } = this.viewConfig;
         if (disabledActions && disabledActions.length) {
             const disabledActionsString = disabledActions.join(',');
@@ -51,6 +59,9 @@ export class PinboardEmbed extends V1Embed {
         }
         if (hiddenActions && hiddenActions.length) {
             params[Param.HideActions] = hiddenActions.join(',');
+        }
+        if (enableVizTransformations) {
+            params[Param.EnableVizTransformations] = true;
         }
 
         const queryParams = getQueryParamString(params);
@@ -85,6 +96,15 @@ export class PinboardEmbed extends V1Embed {
     }
 
     /**
+     * Set the iframe height as per the computed height received
+     * from the ThoughtSpot app
+     * @param data The event payload
+     */
+    private updateIFrameHeight = (data: MessagePayload) => {
+        this.setIFrameHeight(data.data);
+    };
+
+    /**
      * Render an embedded ThoughtSpot pinboard or viz
      * @param renderOptions An object specifying the pinboard id,
      * viz id and the runtime filters
@@ -94,6 +114,10 @@ export class PinboardEmbed extends V1Embed {
         vizId,
         runtimeFilters,
     }: PinboardRenderOptions): PinboardEmbed {
+        if (this.viewConfig.fullHeight === true) {
+            this.on(EventTypeV1.EmbedHeight, this.updateIFrameHeight);
+        }
+
         super.render();
 
         const src = this.getIFrameSrc(pinboardId, vizId, runtimeFilters);
