@@ -40,23 +40,6 @@ jobs:
       - name: Run tests
         run: npm test
 
-      # Collect coverage report
-      - uses: 5monkeys/cobertura-action@master
-        with:
-          path: coverage/sdk/cobertura-coverage.xml
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          minimum_coverage: 0
-          
-      # Runs TypeScript compiler
-      - name: Run TypeScript compiler
-        run: npm run tsc
-
-      # Collect artifacts
-      - uses: actions/upload-artifact@v2
-        with:
-          name: test-coverage
-          path: coverage/
-
       # Setting up git user and email
       - name: Setup git user
         run: |
