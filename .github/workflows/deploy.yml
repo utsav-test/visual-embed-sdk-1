@@ -7,6 +7,9 @@ name: Release
 on:
   push:
     branches: [ main ]
+    paths: 
+    - 'docs/typedoc/**'
+    - 'docs/src/asciidocs/**'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -31,10 +34,6 @@ jobs:
       # Run npm install
       - name: Run npm install
         run: npm install
-
-      # Runs linter
-      - name: Run linter
-        run: npm run lint
 
       # Runs tests
       - name: Run tests
