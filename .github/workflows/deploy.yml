@@ -35,10 +35,6 @@ jobs:
       - name: Run npm install
         run: npm install
 
-      # Runs tests
-      - name: Run tests
-        run: npm test
-
       # Setting up git user and email
       - name: Setup git user
         run: |
