@@ -44,6 +44,37 @@ const IndexPage = ({ location }) => {
             : LEFT_NAV_WIDTH_MOBILE,
     );
     const [query, updateQuery] = useState('');
+    const [innW, setinnW] = useState(0);
+    let Wheight;
+    let Wwidth;
+    if (typeof window !== `undefined`) {
+        Wheight = window.innerHeight;
+        Wwidth = window.innerWidth;
+    }
+    const [dimensions, setDimensions] = useState({
+        windowHeight: Wheight,
+        windowWidth: Wwidth,
+    });
+
+    useEffect(() => {
+        const handleResize = () => {
+            setDimensions({
+                windowHeight: window.innerHeight,
+                windowWidth: window.innerWidth,
+            });
+        };
+        window.addEventListener(`resize`, handleResize);
+        // Remove the event listener if resizing stopped.
+        return () => window.removeEventListener(`resize`, handleResize);
+    }, []);
+
+    useEffect(() => {
+        if (dimensions.windowWidth > 1036) {
+            setinnW(dimensions.windowWidth);
+        } else {
+            setinnW(dimensions.windowWidth + 50);
+        }
+    }, [dimensions.windowWidth]);
 
     useEffect(() => {
         const paramObj = queryStringParser(location.search);
@@ -57,11 +88,14 @@ const IndexPage = ({ location }) => {
     useEffect(() => {
         // This is to send navigation events to the parent app (if in Iframe)
         // So that the parent can sync the url.
-        window.parent.postMessage({
-            params: queryStringParser(location.search),
-            subsection: location.hash.split('#')[1] || '',
-        }, '*');
-    }, [location.search, location.hash])
+        window.parent.postMessage(
+            {
+                params: queryStringParser(location.search),
+                subsection: location.hash.split('#')[1] || '',
+            },
+            '*',
+        );
+    }, [location.search, location.hash]);
 
     const setPageContent = (pageid: string = NOT_FOUND_PAGE_ID) => {
         // check if url query param is having pageid or not
@@ -76,7 +110,7 @@ const IndexPage = ({ location }) => {
                 // get and set page title
                 setDocTitle(
                     edges[edgeIndex].node.document.title ||
-                    edges[edgeIndex].node.pageAttributes.title,
+                        edges[edgeIndex].node.pageAttributes.title,
                 );
 
                 // get and set doc page content with dynamic data replaced
@@ -168,7 +202,10 @@ const IndexPage = ({ location }) => {
                 />
                 <div
                     className="documentBody"
-                    style={{ width: `${width - leftNavWidth}px` }}
+                    style={{
+                        width: `${width - leftNavWidth}px`,
+                        maxWidth: `${innW - 321}px`,
+                    }}
                 >
                     <Search
                         value={query}
