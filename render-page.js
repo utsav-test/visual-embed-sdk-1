@@ -4178,13 +4178,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
 const Docmap = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().lazy(() => Promise.resolve().then(() => (0,_babel_runtime_helpers_esm_interopRequireWildcard__WEBPACK_IMPORTED_MODULE_0__.default)(__webpack_require__(/*! ../components/Docmap */ "./docs/src/components/Docmap/index.tsx"))));
 const Document = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().lazy(() => Promise.resolve().then(() => (0,_babel_runtime_helpers_esm_interopRequireWildcard__WEBPACK_IMPORTED_MODULE_0__.default)(__webpack_require__(/*! ../components/Document */ "./docs/src/components/Document/index.tsx"))));
-const Search = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().lazy(() => Promise.resolve().then(() => (0,_babel_runtime_helpers_esm_interopRequireWildcard__WEBPACK_IMPORTED_MODULE_0__.default)(__webpack_require__(/*! ../components/Search */ "./docs/src/components/Search/index.tsx"))));
-
-
-
- // markup
+const Search = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().lazy(() => Promise.resolve().then(() => (0,_babel_runtime_helpers_esm_interopRequireWildcard__WEBPACK_IMPORTED_MODULE_0__.default)(__webpack_require__(/*! ../components/Search */ "./docs/src/components/Search/index.tsx")))); // markup
 
 const IndexPage = ({
   location
@@ -4315,17 +4315,13 @@ const IndexPage = ({
     style: {
       width: `${width - leftNavWidth}px`
     }
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(react__WEBPACK_IMPORTED_MODULE_1__.Suspense, {
-    fallback: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement("div", null)
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(Search, {
     value: query,
     onChange: e => updateQuery(e.target.value),
     options: results,
     optionSelected: optionSelected
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement("div", {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement("div", {
     className: "introWrapper"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(react__WEBPACK_IMPORTED_MODULE_1__.Suspense, {
-    fallback: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement("div", null)
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(Document, {
     docTitle: docTitle,
     docContent: docContent
@@ -4333,7 +4329,7 @@ const IndexPage = ({
     docContent: docContent,
     location: location,
     options: results
-  }))))));
+  })))));
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (IndexPage);
@@ -79716,7 +79712,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"polyfill":["/polyfill-59a7bd5b74657530f8e9.js"],"app":["/app-f347035f025e7e307f6a.js"],"component---docs-src-pages-404-tsx":["/component---docs-src-pages-404-tsx-7125795503e19c71fd21.js"],"component---docs-src-pages-index-tsx":["/component---docs-src-pages-index-tsx-391e7e701db934332e1d.js"]}');
+module.exports = JSON.parse('{"polyfill":["/polyfill-59a7bd5b74657530f8e9.js"],"app":["/app-f347035f025e7e307f6a.js"],"component---docs-src-pages-404-tsx":["/component---docs-src-pages-404-tsx-7125795503e19c71fd21.js"],"component---docs-src-pages-index-tsx":["/component---docs-src-pages-index-tsx-906072b2669ab4d92469.js"]}');
 
 /***/ }),
 
