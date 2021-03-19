@@ -8,10 +8,8 @@ on:
     branches:
     # Push events on `main` branch
       - main
-    # Push events on `dev` branch
-      - dev
     # Push events on `release` branch
-    - release
+      - release
     paths: 
     - 'static/typedoc/**'
     - 'docs/src/**'
@@ -50,7 +48,7 @@ jobs:
         
       - name: publish
         uses: peaceiris/actions-gh-pages@v3
-        if: ${{ BRANCH_NAME == 'main' || BRANCH_NAME == 'dev' }}
+        if: ${{ BRANCH_NAME == 'main' }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
