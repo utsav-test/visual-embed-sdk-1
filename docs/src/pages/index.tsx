@@ -69,7 +69,7 @@ const IndexPage = ({ location }) => {
     }, []);
 
     useEffect(() => {
-        if (dimensions.windowWidth > 1024) {
+        if (dimensions.windowWidth > MAX_MOBILE_RESOLUTION) {
             if (leftNavWidth > 262 && leftNavWidth < 308) {
                 console.log(leftNavWidth);
                 setdocWidth(
