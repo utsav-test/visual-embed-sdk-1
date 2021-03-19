@@ -5,14 +5,20 @@ name: DeployDocs
 # events but only for the main branch
 on:
   push:
-    branches: [ main ]
+    branches:
+    # Push events on `main` branch
+      - main
+    # Push events on `dev` branch
+      - dev
+    # Push events on `release` branch
+    - release
     paths: 
     - 'static/typedoc/**'
     - 'docs/src/asciidocs/**'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
+  # This workflow contains a single job called "deploy"
   deploy:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -21,6 +27,11 @@ jobs:
       GH_TOKEN: ${{ secrets.GATSBY_PUBLISH_SECRET_KEY }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      # extract branch name
+      - name: Extract branch name
+        run: echo "::set-env name=BRANCH_NAME::$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
@@ -34,11 +45,18 @@ jobs:
         run: npm install
 
       # Deploy on github pages
-      - name: Build
+      - name: build
         run: npm run docs-cmd -- build
         
       - name: publish
         uses: peaceiris/actions-gh-pages@v3
+        if: ${{ BRANCH_NAME == 'main' || BRANCH_NAME == 'dev' }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
+          destination_dir: ./dev
+        if: ${{ BRANCH_NAME == 'release' }}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          destination_dir: ./release
