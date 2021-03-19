@@ -1,12 +1,28 @@
-import React, { useState, useEffect,Suspense,lazy } from 'react';
+import React, { useState, useEffect, lazy } from 'react';
+import Loadable from 'react-loadable';
 import { useStaticQuery, graphql, navigate } from 'gatsby';
 import { useResizeDetector } from 'react-resize-detector';
 import { useFlexSearch } from 'react-use-flexsearch';
 import queryStringParser from '../utils/app-utils';
 import passThroughHandler from '../utils/doc-utils';
-const Docmap = React.lazy(()=>import('../components/Docmap'));
-const Document = React.lazy(()=>import('../components/Document'));
-const Search = React.lazy(()=>import('../components/Search'));
+const Docmap = Loadable({
+    loader: () => import('../components/Docmap'),
+    loading() {
+        return null;
+    },
+});
+const Document = Loadable({
+    loader: () => import('../components/Document'),
+    loading() {
+        return null;
+    },
+});
+const Search = Loadable({
+    loader: () => import('../components/Search'),
+    loading() {
+        return null;
+    },
+});
 import LeftSidebar from '../components/LeftSidebar';
 import '../assets/styles/index.scss';
 import {
@@ -28,7 +44,7 @@ const IndexPage = ({ location }) => {
     const { width, ref } = useResizeDetector();
 
     const [params, setParams] = useState({
-        [TS_HOST_PARAM]: '',
+        [TS_HOST_PARAM]: 'https://try-everywhere.thoughtspot.cloud/v2',
         [TS_ORIGIN_PARAM]: '',
         [TS_PAGE_ID_PARAM]: '',
         [NAV_PREFIX]: '',
@@ -51,8 +67,20 @@ const IndexPage = ({ location }) => {
             paramObj[e.node.parent.name] =
                 e.node.pageAttributes.pageid || NOT_FOUND_PAGE_ID;
         });
-        setParams({ ...paramObj });
+        setParams({ ...params, ...paramObj });
     }, [location.search]);
+
+    useEffect(() => {
+        // This is to send navigation events to the parent app (if in Iframe)
+        // So that the parent can sync the url.
+        window.parent.postMessage(
+            {
+                params: queryStringParser(location.search),
+                subsection: location.hash.split('#')[1] || '',
+            },
+            '*',
+        );
+    }, [location.search, location.hash]);
 
     const setPageContent = (pageid: string = NOT_FOUND_PAGE_ID) => {
         // check if url query param is having pageid or not
@@ -93,7 +121,7 @@ const IndexPage = ({ location }) => {
         // get & set left navigation area content with dynamic link creation
         setNavContent(passThroughHandler(edges[navIndex].node.html, params));
 
-        // get & set left navigation 'SpotDev Home' button url
+        // get & set left navigation 'Back' button url
         setBackLink(params[TS_ORIGIN_PARAM]);
 
         // set page title and content based on pageid
@@ -146,11 +174,9 @@ const IndexPage = ({ location }) => {
         updateQuery('');
         navigate(pageid);
     };
-
     return (
-        <>  
+        <>
             <main ref={ref as React.RefObject<HTMLDivElement>}>
-                
                 <LeftSidebar
                     navTitle={navTitle}
                     navContent={navContent}
@@ -163,7 +189,6 @@ const IndexPage = ({ location }) => {
                     className="documentBody"
                     style={{ width: `${width - leftNavWidth}px` }}
                 >
-                    <Suspense fallback={<div> </div>}>
                     <Search
                         value={query}
                         onChange={(e: React.FormEvent<HTMLInputElement>) =>
@@ -172,16 +197,13 @@ const IndexPage = ({ location }) => {
                         options={results}
                         optionSelected={optionSelected}
                     />
-                    </Suspense>
                     <div className="introWrapper">
-                        <Suspense fallback={<div> </div>}>
                         <Document docTitle={docTitle} docContent={docContent} />
                         <Docmap
                             docContent={docContent}
                             location={location}
                             options={results}
                         />
-                        </Suspense>
                     </div>
                 </div>
             </main>
