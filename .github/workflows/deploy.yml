@@ -27,8 +27,18 @@ jobs:
     steps:
       # extract branch name
       - name: Extract branch name
-        run: echo "::set-env name=BRANCH_NAME::$(echo ${GITHUB_REF#refs/heads/})"
+        run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
         id: extract_branch
+
+      # Add build env for Prod
+      - name: Add build Env for Prod
+        if: ${{ env.BRANCH_NAME == 'release' }}
+        run: echo "BUILD_ENV=PROD" >> $GITHUB_ENV
+
+      # Add build env for Dev/Staging
+      - name: Add build Env for Dev/Staging
+        if: ${{ env.BRANCH_NAME == 'main' }}
+        run: echo "BUILD_ENV=DEV" >> $GITHUB_ENV
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
@@ -46,14 +56,19 @@ jobs:
       - name: build
         run: npm run docs-cmd -- build
         
-      - name: publish
+      # Deploy on github pages for Dev env
+      - name: publish-dev
         uses: peaceiris/actions-gh-pages@v3
-        if: ${{ BRANCH_NAME == 'main' }}
+        if: ${{ env.BRANCH_NAME == 'main' }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
           destination_dir: ./dev
-        if: ${{ BRANCH_NAME == 'release' }}
+
+      # Deploy on github pages for Prod env
+      - name: publish-release
+        uses: peaceiris/actions-gh-pages@v3
+        if: ${{ env.BRANCH_NAME == 'release' }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
