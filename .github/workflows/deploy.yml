@@ -12,9 +12,10 @@ on:
     - 'static/typedoc/**'
     - 'docs/src/**'
   
+  # Manual 
   workflow_dispatch:
     branches:
-      - release
+      - test-SCAL-79910
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
