@@ -8,11 +8,13 @@ on:
     branches:
     # Push events on `main` branch
       - main
-    # Push events on `release` branch
-      - release
     paths: 
     - 'static/typedoc/**'
     - 'docs/src/**'
+  
+  workflow_dispatch:
+    branches:
+      - release
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
