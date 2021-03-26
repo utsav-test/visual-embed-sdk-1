@@ -12,4 +12,14 @@ module.exports = {
     TYPE_DOC_PREFIX: 'typedoc',
     DEFAULT_HOST: 'https://try-everywhere.thoughtspot.cloud/v2',
     DEFAULT_APP_ROOT: '/everywhere',
+    BUILD_ENVS: {
+        PROD: 'PROD',
+        PROD: 'DEV',
+        PROD: 'STAGING',
+        PROD: 'LOCAL',
+    },
+    DEPLOYE_ENVS: {
+        RELEASE: 'release',
+        DEV: 'dev',
+    },
 };

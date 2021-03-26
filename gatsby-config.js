@@ -2,16 +2,16 @@ const asciidoc = require(`asciidoctor`)();
 const config = require('./docs/src/configs/doc-configs');
 const { htmlToText } = require('html-to-text');
 
-const buildEnv = process.env.BUILD_ENV || 'LOCAL'; // Default build env
+const buildEnv = process.env.BUILD_ENV || config.BUILD_ENVS.LOCAL; // Default build env
 
 const getPathPrefix = () => {
     switch (buildEnv) {
-        case 'PROD':
-            return 'release';
-        case 'DEV':
-        case 'STAGING':
-            return 'dev';
-        case 'LOCAL':
+        case config.BUILD_ENVS.PROD:
+            return config.DEPLOYE_ENVS.RELEASE;
+        case config.BUILD_ENVS.DEV:
+        case config.BUILD_ENVS.STAGING:
+            return config.DEPLOYE_ENVS.DEV;
+        case config.BUILD_ENVS.LOCAL:
         default:
             return ''; // Default path prefix
     }

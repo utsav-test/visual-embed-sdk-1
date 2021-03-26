@@ -11,6 +11,8 @@ import {
     TS_PAGE_ID_PARAM,
     DEFAULT_HOST,
     DEFAULT_APP_ROOT,
+    BUILD_ENVS,
+    DEPLOYE_ENVS,
 } from '../configs/doc-configs';
 
 /**
@@ -59,10 +61,14 @@ export const queryStringParser = (queryParamStr: string) => {
     ] = `${tsHostUrl}/#${queryParamObj[TS_APP_ROOT_PARAM]}`;
 
     // set deployed environment of 'Visual Embed SDK'
-    const buildEnv = process.env.BUILD_ENV || 'LOCAL';
+    const buildEnv = process.env.BUILD_ENV || BUILD_ENVS.LOCAL;
     let deployedEnv = '';
-    if (buildEnv !== 'LOCAL') {
-        deployedEnv = `${buildEnv === 'PROD' ? 'release' : 'dev'}/`;
+    if (buildEnv !== BUILD_ENVS.LOCAL) {
+        deployedEnv = `${
+            buildEnv === BUILD_ENVS.PROD
+                ? DEPLOYE_ENVS.RELEASE
+                : DEPLOYE_ENVS.DEV
+        }/`;
     }
 
     // prepare and set 'Visual Embed SDK' links URL prefix
