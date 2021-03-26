@@ -7,10 +7,10 @@ const buildEnv = process.env.BUILD_ENV || config.BUILD_ENVS.LOCAL; // Default bu
 const getPathPrefix = () => {
     switch (buildEnv) {
         case config.BUILD_ENVS.PROD:
-            return config.DEPLOYE_ENVS.RELEASE;
+            return config.DEPLOY_ENVS.RELEASE;
         case config.BUILD_ENVS.DEV:
         case config.BUILD_ENVS.STAGING:
-            return config.DEPLOYE_ENVS.DEV;
+            return config.DEPLOY_ENVS.DEV;
         case config.BUILD_ENVS.LOCAL:
         default:
             return ''; // Default path prefix

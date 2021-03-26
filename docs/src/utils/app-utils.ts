@@ -12,7 +12,7 @@ import {
     DEFAULT_HOST,
     DEFAULT_APP_ROOT,
     BUILD_ENVS,
-    DEPLOYE_ENVS,
+    DEPLOY_ENVS,
 } from '../configs/doc-configs';
 
 /**
@@ -65,9 +65,7 @@ export const queryStringParser = (queryParamStr: string) => {
     let deployedEnv = '';
     if (buildEnv !== BUILD_ENVS.LOCAL) {
         deployedEnv = `${
-            buildEnv === BUILD_ENVS.PROD
-                ? DEPLOYE_ENVS.RELEASE
-                : DEPLOYE_ENVS.DEV
+            buildEnv === BUILD_ENVS.PROD ? DEPLOY_ENVS.RELEASE : DEPLOY_ENVS.DEV
         }/`;
     }
 
