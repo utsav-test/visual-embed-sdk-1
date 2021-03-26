@@ -7,6 +7,7 @@ import {
     TS_APP_ROOT_PARAM,
     TS_PAGE_ID_PARAM,
     DEFAULT_HOST,
+    DEFAULT_PREVIEW_HOST,
     DEFAULT_APP_ROOT,
 } from '../configs/doc-configs';
 
@@ -20,7 +21,7 @@ export const queryStringParser = (queryParamStr: string) => {
 
     const entries = new URLSearchParams(queryParamStr).entries();
     let navPrefix = '?';
-    let tsHostUrl = DEFAULT_HOST;
+    let tsHostUrl = DEFAULT_PREVIEW_HOST;
 
     for (const [key, value] of entries) {
         queryParamObj[key] = value;
