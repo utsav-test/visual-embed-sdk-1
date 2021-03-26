@@ -32,6 +32,8 @@ class CustomDocConverter {
     isTransformLink(target) {
         return (
             !target.includes(`{{${config.NAV_PREFIX}}}`) &&
+            !target.includes(`{{${config.PREVIEW_PREFIX}}}`) &&
+            !target.includes(`{{${config.VISUAL_EMBED_SDK_PREFIX}}}`) &&
             !target.includes(`{{${config.TS_HOST_PARAM}}}`) &&
             !target.includes('www.') &&
             !target.startsWith('http')
