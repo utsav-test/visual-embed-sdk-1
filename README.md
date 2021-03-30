@@ -5,7 +5,7 @@
 
 <br/>
 
-# ThoughtSpot Visual Embed SDK  [![Coverage Status](https://coveralls.io/repos/github/ts-blink/embed-sdk/badge.svg?branch=main)](https://coveralls.io/github/ts-blink/embed-sdk?branch=main) ![npm (scoped with tag)](https://img.shields.io/npm/v/@thoughtspot/visual-embed-sdk/prod)
+# ThoughtSpot Visual Embed SDK  [![Coverage Status](https://coveralls.io/repos/github/ts-blink/embed-sdk/badge.svg?branch=main)](https://coveralls.io/github/ts-blink/embed-sdk?branch=main) ![npm (scoped with tag)](https://img.shields.io/npm/v/@thoughtspot/visual-embed-sdk)
 
 SDK to embed ThoughtSpot into your web apps.
 
@@ -13,14 +13,13 @@ SDK to embed ThoughtSpot into your web apps.
 
 ## Usage
 
-Via [NPM](https://www.npmjs.com/package/@thoughtspot/visual-embed-sdk):
+Install the Visual Embed SDK from [NPM](https://www.npmjs.com/package/@thoughtspot/visual-embed-sdk):
 
 ```
 npm i @thoughtspot/visual-embed-sdk
 ```
 
-The SDK is written in TypeScript and is also provided both as ESM and UMD module,
-allowing you to use it in a variety of environments, e.g.,
+The SDK is written in TypeScript and is also provided both as ES Module (ESM) and Universal Module Definition (UMD) modules, allowing you to use it in a variety of environments. For example,...
 
 ```js
 // CommonJS
@@ -42,7 +41,7 @@ import * as TsEmbedSDK from '@thoughtspot/visual-embed-sdk';
 
 ## Full API Reference
 
-Please visit our [API reference docs](https://docs.thoughtspot.com/visual-embed-sdk/typedoc/modules.html).
+Please visit our [API reference docs](https://docs.thoughtspot.com/visual-embed-sdk/release/typedoc/modules.html).
 
 <br/>
 

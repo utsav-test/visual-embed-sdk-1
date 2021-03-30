@@ -2,7 +2,7 @@ import React, { useState, useEffect, lazy } from 'react';
 import { useStaticQuery, graphql, navigate } from 'gatsby';
 import { useResizeDetector } from 'react-resize-detector';
 import { useFlexSearch } from 'react-use-flexsearch';
-import {queryStringParser,removeTrailingSlash} from '../utils/app-utils';
+import { queryStringParser } from '../utils/app-utils';
 import passThroughHandler from '../utils/doc-utils';
 import LeftSidebar from '../components/LeftSidebar';
 import Docmap from '../components/Docmap';
@@ -15,25 +15,27 @@ import {
     TS_ORIGIN_PARAM,
     TS_PAGE_ID_PARAM,
     NAV_PREFIX,
+    PREVIEW_PREFIX,
     NOT_FOUND_PAGE_ID,
+    DEFAULT_HOST,
+    DEFAULT_PREVIEW_HOST,
+    DEFAULT_APP_ROOT,
 } from '../configs/doc-configs';
 import {
     LEFT_NAV_WIDTH_DESKTOP,
     MAX_MOBILE_RESOLUTION,
     LEFT_NAV_WIDTH_MOBILE,
-    INTRO_WRAPPER_MARGIN_TOP,
 } from '../constants/uiConstants';
 
-const PUBLIC_SITE_URL = 'https://try-everywhere.thoughtspot.cloud/v2/#/everywhere-standalone';
 // markup
 const IndexPage = ({ location }) => {
     const { width, ref } = useResizeDetector();
-
     const [params, setParams] = useState({
-        [TS_HOST_PARAM]: 'https://try-everywhere.thoughtspot.cloud/v2',
+        [TS_HOST_PARAM]: DEFAULT_HOST,
         [TS_ORIGIN_PARAM]: '',
         [TS_PAGE_ID_PARAM]: '',
         [NAV_PREFIX]: '',
+        [PREVIEW_PREFIX]: `${DEFAULT_PREVIEW_HOST}/#${DEFAULT_APP_ROOT}`,
     });
     const [docTitle, setDocTitle] = useState('');
     const [docContent, setDocContent] = useState('');
@@ -45,7 +47,7 @@ const IndexPage = ({ location }) => {
             ? LEFT_NAV_WIDTH_DESKTOP
             : LEFT_NAV_WIDTH_MOBILE,
     );
-    const [query, updateQuery] = useState('');
+    const [keyword, updateKeyword] = useState('');
 
     useEffect(() => {
         const paramObj = queryStringParser(location.search);
@@ -53,8 +55,7 @@ const IndexPage = ({ location }) => {
             paramObj[e.node.parent.name] =
                 e.node.pageAttributes.pageid || NOT_FOUND_PAGE_ID;
         });
-        paramObj[TS_ORIGIN_PARAM] = paramObj[TS_ORIGIN_PARAM] || PUBLIC_SITE_URL;
-        paramObj[TS_ORIGIN_PARAM] = removeTrailingSlash(paramObj[TS_ORIGIN_PARAM]);
+
         setParams({ ...params, ...paramObj });
     }, [location.search]);
 
@@ -171,7 +172,7 @@ const IndexPage = ({ location }) => {
         `,
     );
 
-    const results = useFlexSearch(query, index, store).reduce((acc, cur) => {
+    const results = useFlexSearch(keyword, index, store).reduce((acc, cur) => {
         if (!acc.some((data) => data.pageid === cur.pageid)) {
             acc.push(cur);
         }
@@ -179,9 +180,10 @@ const IndexPage = ({ location }) => {
     }, []);
 
     const optionSelected = (pageid: string) => {
-        updateQuery('');
-        navigate(pageid);
+        updateKeyword('');
+        navigate(`${params[NAV_PREFIX]}=${pageid}`);
     };
+
     return (
         <>
             <main ref={ref as React.RefObject<HTMLDivElement>}>
@@ -198,9 +200,9 @@ const IndexPage = ({ location }) => {
                     style={{ width: `${width - leftNavWidth}px` }}
                 >
                     <Search
-                        value={query}
+                        keyword={keyword}
                         onChange={(e: React.FormEvent<HTMLInputElement>) =>
-                            updateQuery((e.target as HTMLInputElement).value)
+                            updateKeyword((e.target as HTMLInputElement).value)
                         }
                         options={results}
                         optionSelected={optionSelected}

@@ -14,7 +14,7 @@ import { Param, RuntimeFilter, DOMSelector } from '../types';
 import { V1Embed, ViewConfig } from './base';
 
 /**
- * Pages within the ThoughtSpot app that can be embedded
+ * Pages within the ThoughtSpot app that can be embedded.
  */
 // eslint-disable-next-line no-shadow
 export enum Page {
@@ -41,27 +41,35 @@ export enum Page {
 }
 
 /**
- * The view configuration for full app embedding
+ * The view configuration for full app embedding.
  * @Category App Embed
  */
 export interface AppViewConfig extends ViewConfig {
     /**
      * If true, the main navigation bar within the ThoughtSpot app
-     * is displayed (hidden by default)
+     * is displayed (hidden by default).
      */
     showPrimaryNavbar?: boolean;
     /**
-     * An URL path within the app that is to be embedded
+     * An URL path within the app that is to be embedded.
+     * If both path and pageId values are defined, the path definition
+     * takes precedence.
      */
     path?: string;
     /**
-     * The page to load initially in the embedded view
+     * The application page to set as the start page
+     * in the embedded view.
      */
     pageId?: Page;
+    /**
+     * This puts a filter tag on the Application, all metadata lists in the app
+     * like pinboards, Answers etc would be filtered by this tag.
+     */
+    tag?: string;
 }
 
 /**
- * Embed a page within the ThoughtSpot app
+ * Embeds full ThoughtSpot experience in a host application.
  * @Category App Embed
  */
 export class AppEmbed extends V1Embed {
@@ -73,8 +81,8 @@ export class AppEmbed extends V1Embed {
     }
 
     /**
-     * Construct a map of params to be passed on to the
-     * embedded pinboard or viz
+     * Constructs a map of params to be passed on to the
+     * embedded pinboard or viz.
      */
     private getEmbedParams() {
         const params = {};
@@ -82,6 +90,7 @@ export class AppEmbed extends V1Embed {
             disabledActions,
             disabledActionReason,
             hiddenActions,
+            tag,
         } = this.viewConfig;
 
         if (disabledActions?.length) {
@@ -93,6 +102,9 @@ export class AppEmbed extends V1Embed {
         if (hiddenActions?.length) {
             params[Param.HideActions] = hiddenActions;
         }
+        if (tag) {
+            params[Param.Tag] = tag;
+        }
 
         const queryParams = getQueryParamString(params);
 
@@ -100,27 +112,26 @@ export class AppEmbed extends V1Embed {
     }
 
     /**
-     * Construct the URL of the ThoughtSpot app page to be rendered
+     * Constructs the URL of the ThoughtSpot app page to be rendered.
      * @param pageId The id of the page to be embedded
      */
     private getIFrameSrc(pageId: string, runtimeFilters: RuntimeFilter[]) {
         const filterQuery = getFilterQuery(runtimeFilters || []);
-        let url = `${this.getV1EmbedBasePath(
-            filterQuery,
+        const queryParams = this.getEmbedParams();
+        const queryString = [filterQuery, queryParams]
+            .filter(Boolean)
+            .join('&');
+        const url = `${this.getV1EmbedBasePath(
+            queryString,
             this.viewConfig.showPrimaryNavbar,
             true,
         )}/${pageId}`;
-
-        const postHashQueryParams = this.getEmbedParams();
-        if (postHashQueryParams) {
-            url = `${url}?${postHashQueryParams}`;
-        }
 
         return url;
     }
 
     /**
-     * Get the ThoughtSpot route of the page for a particular page id
+     * Gets the ThoughtSpot route of the page for a particular page id.
      * @param pageId The identifier for a page in the ThoughtSpot app
      */
     private getPageRoute(pageId: Page) {
@@ -140,7 +151,7 @@ export class AppEmbed extends V1Embed {
     }
 
     /**
-     * Format the path provided by the user
+     * Formats the path provided by the user.
      * @param path The URL path
      * @returns The URL path that the embedded app understands
      */
@@ -158,7 +169,7 @@ export class AppEmbed extends V1Embed {
     }
 
     /**
-     * Render an embedded app in the ThoughtSpot app
+     * Renders an embedded app in the ThoughtSpot app.
      * @param renderOptions An object containing the page id
      * to be embedded
      */

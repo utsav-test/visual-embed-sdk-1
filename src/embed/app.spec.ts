@@ -133,7 +133,22 @@ describe('App embed tests', () => {
         appEmbed.render();
         await executeAfterWait(() => {
             expect(getIFrameSrc()).toBe(
-                `http://${thoughtSpotHost}/?embedApp=true&primaryNavHidden=false#/home?disableAction=save,update&disableHint=Access%20denied&hideAction=download`,
+                `http://${thoughtSpotHost}/?embedApp=true&primaryNavHidden=false&disableAction=save,update&disableHint=Access%20denied&hideAction=download#/home`,
+            );
+        });
+    });
+
+    test('Should add the tag to the iframe src', async () => {
+        const appEmbed = new AppEmbed(getRootEl(), {
+            ...defaultViewConfig,
+            showPrimaryNavbar: false,
+            tag: 'Finance',
+        } as AppViewConfig);
+
+        appEmbed.render();
+        await executeAfterWait(() => {
+            expect(getIFrameSrc()).toBe(
+                `http://${thoughtSpotHost}/?embedApp=true&primaryNavHidden=true&tag=Finance#/home`,
             );
         });
     });
