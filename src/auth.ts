@@ -17,7 +17,9 @@ export const EndPoints = {
  * Check if we are logged into the ThoughtSpot cluster
  * @param thoughtSpotHost The ThoughtSpot cluster hostname or IP
  */
-export async function getSessionInfo(thoughtSpotHost: string): Promise<{ loggedIn: boolean, data: any }> {
+export async function getSessionInfo(
+    thoughtSpotHost: string,
+): Promise<{ loggedIn: boolean; data: any }> {
     const authVerificationUrl = `${thoughtSpotHost}${EndPoints.AUTH_VERIFICATION}`;
     const response = await fetch(authVerificationUrl, {
         credentials: 'include',
