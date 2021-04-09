@@ -5,7 +5,7 @@ let loggedInStatus = false;
 
 const SSO_REDIRECTION_MARKER_GUID = '5e16222e-ef02-43e9-9fbd-24226bf3ce5b';
 
-const EndPoints = {
+export const EndPoints = {
     AUTH_VERIFICATION: '/callosum/v1/session/info',
     SSO_LOGIN_TEMPLATE: (targetUrl: string) =>
         `/callosum/v1/saml/login?targetURLPath=${targetUrl}`,
@@ -17,13 +17,17 @@ const EndPoints = {
  * Check if we are logged into the ThoughtSpot cluster
  * @param thoughtSpotHost The ThoughtSpot cluster hostname or IP
  */
-async function isLoggedIn(thoughtSpotHost: string): Promise<boolean> {
+export async function getSessionInfo(thoughtSpotHost: string): Promise<{ loggedIn: boolean, data: any }> {
     const authVerificationUrl = `${thoughtSpotHost}${EndPoints.AUTH_VERIFICATION}`;
     const response = await fetch(authVerificationUrl, {
         credentials: 'include',
     });
+    const data = await response.json();
 
-    return response.status === 200;
+    return {
+        data,
+        loggedIn: response.status === 200,
+    };
 }
 
 /**
@@ -63,7 +67,7 @@ export const doTokenAuth = async (embedConfig: EmbedConfig): Promise<void> => {
             'Either auth endpoint or getAuthToken function must be provided',
         );
     }
-    const loggedIn = await isLoggedIn(thoughtSpotHost);
+    const { loggedIn } = await getSessionInfo(thoughtSpotHost);
     if (!loggedIn) {
         let authToken = null;
         if (getAuthToken) {
@@ -94,7 +98,7 @@ export const doTokenAuth = async (embedConfig: EmbedConfig): Promise<void> => {
  */
 export const doBasicAuth = async (embedConfig: EmbedConfig): Promise<void> => {
     const { thoughtSpotHost, username, password } = embedConfig;
-    const loggedIn = await isLoggedIn(thoughtSpotHost);
+    const { loggedIn } = await getSessionInfo(thoughtSpotHost);
     if (!loggedIn) {
         const response = await fetch(
             `${thoughtSpotHost}${EndPoints.BASIC_LOGIN}`,
@@ -122,7 +126,7 @@ export const doBasicAuth = async (embedConfig: EmbedConfig): Promise<void> => {
  */
 export const doSamlAuth = async (embedConfig: EmbedConfig): Promise<void> => {
     const { thoughtSpotHost } = embedConfig;
-    const loggedIn = await isLoggedIn(thoughtSpotHost);
+    const { loggedIn } = await getSessionInfo(thoughtSpotHost);
     if (loggedIn) {
         if (isAtSSORedirectUrl()) {
             removeSSORedirectUrlMarker();

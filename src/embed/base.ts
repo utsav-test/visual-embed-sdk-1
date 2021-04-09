@@ -26,6 +26,7 @@ import {
     RuntimeFilter,
 } from '../types';
 import { authenticate, isAuthenticated } from '../auth';
+import { initMixpanel, uploadMixpanelEvent, MIXPANEL_EVENT } from '../mixpanel-service';
 
 let config = {} as EmbedConfig;
 
@@ -58,9 +59,15 @@ const handleAuth = () => {
  * @param embedConfig The configuration object containing ThoughtSpot host,
  * authentication mechanism and so on.
  */
-export const init = (embedConfig: EmbedConfig): void => {
+export const init = async (embedConfig: EmbedConfig): Promise<void> => {
     config = embedConfig;
     handleAuth();
+
+    await initMixpanel(config.thoughtSpotHost);
+    uploadMixpanelEvent(MIXPANEL_EVENT.VISUAL_SDK_CALLED_INIT, {
+        authType: config.authType,
+        host: config.thoughtSpotHost,
+    });
 };
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -281,11 +288,15 @@ export class TsEmbed {
             // warn: URL too long
         }
 
+        const initTimestamp = Date.now();
+
         this.executeCallbacks(EmbedEvent.Init, {
             data: {
-                timestamp: Date.now(),
+                timestamp: initTimestamp,
             },
         });
+
+        uploadMixpanelEvent(MIXPANEL_EVENT.VISUAL_SDK_RENDER_START);
 
         authPromise
             ?.then(() => {
@@ -305,13 +316,17 @@ export class TsEmbed {
                 this.iFrame.style.height = `${height}`;
                 this.iFrame.style.border = '0';
                 this.iFrame.name = 'ThoughtSpot Embedded Analytics';
-                this.iFrame.addEventListener('load', () =>
+                this.iFrame.addEventListener('load', () => {
+                    const loadTimestamp = Date.now();
                     this.executeCallbacks(EmbedEvent.Load, {
                         data: {
-                            timestamp: Date.now(),
+                            timestamp: loadTimestamp,
                         },
-                    }),
-                );
+                    });
+                    uploadMixpanelEvent(MIXPANEL_EVENT.VISUAL_SDK_IFRAME_LOAD_PERFORMANCE, {
+                        timeTookToLoad: loadTimestamp - initTimestamp,
+                    });
+                });
                 this.el.innerHTML = '';
                 this.el.appendChild(this.iFrame);
                 this.subscribeToEvents();
