@@ -240,10 +240,16 @@ export class TsEmbed {
     /**
      * Constructs the base URL string to load the ThoughtSpot app
      */
-    protected getEmbedBasePath(): string {
-        return [this.thoughtSpotHost, this.thoughtSpotV2Base, '#', 'embed']
+    protected getEmbedBasePath(queryString: string): string {
+        const basePath = [
+            this.thoughtSpotHost,
+            this.thoughtSpotV2Base,
+            queryString,
+        ]
             .filter((x) => x.length > 0)
             .join('/');
+
+        return `${basePath}#/embed`;
     }
 
     /**
