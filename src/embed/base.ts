@@ -26,7 +26,11 @@ import {
     RuntimeFilter,
 } from '../types';
 import { authenticate, isAuthenticated } from '../auth';
-import { initMixpanel, uploadMixpanelEvent, MIXPANEL_EVENT } from '../mixpanel-service';
+import {
+    initMixpanel,
+    uploadMixpanelEvent,
+    MIXPANEL_EVENT,
+} from '../mixpanel-service';
 
 let config = {} as EmbedConfig;
 
@@ -329,9 +333,12 @@ export class TsEmbed {
                             timestamp: loadTimestamp,
                         },
                     });
-                    uploadMixpanelEvent(MIXPANEL_EVENT.VISUAL_SDK_IFRAME_LOAD_PERFORMANCE, {
-                        timeTookToLoad: loadTimestamp - initTimestamp,
-                    });
+                    uploadMixpanelEvent(
+                        MIXPANEL_EVENT.VISUAL_SDK_IFRAME_LOAD_PERFORMANCE,
+                        {
+                            timeTookToLoad: loadTimestamp - initTimestamp,
+                        },
+                    );
                 });
                 this.el.innerHTML = '';
                 this.el.appendChild(this.iFrame);

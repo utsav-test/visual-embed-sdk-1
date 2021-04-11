@@ -5,19 +5,21 @@ export const MIXPANEL_EVENT = {
     VISUAL_SDK_RENDER_START: 'visual-sdk-render-start',
     VISUAL_SDK_CALLED_INIT: 'visual-sdk-called-init',
     VISUAL_SDK_IFRAME_LOAD_PERFORMANCE: 'visual-sdk-iframe-load-performance',
-}
+};
 
-let _isEventCollectorOn = false;
-const eventCollectorQueue: { eventId: string, eventProps: any }[] = [];
+const nodeEnv = process.env.NODE_ENV;
+const TEST_ENV = 'test';
+
+let isEventCollectorOn = false;
+const eventCollectorQueue: { eventId: string; eventProps: any }[] = [];
 
 function setEventCollectorOn() {
-    _isEventCollectorOn = true;
+    isEventCollectorOn = true;
 }
 
-function isEventCollectorOn() {
-    return _isEventCollectorOn;
+function getEventCollectorOnValue() {
+    return isEventCollectorOn;
 }
-
 
 /**
  * Pushes the event with its Property key-value map to mixpanel.
@@ -28,7 +30,7 @@ export async function uploadMixpanelEvent(
     eventId: string,
     eventProps = {},
 ): Promise<any> {
-    if (!isEventCollectorOn()) {
+    if (!getEventCollectorOnValue()) {
         eventCollectorQueue.push({ eventId, eventProps });
         return Promise.resolve();
     }
@@ -41,7 +43,12 @@ function emptyQueue() {
     });
 }
 
-export async function initMixpanel(thoughtSpotHost: string) : Promise<any> {
+export async function initMixpanel(thoughtSpotHost: string): Promise<any> {
+    if (nodeEnv === TEST_ENV) {
+        Promise.resolve();
+        return;
+    }
+
     const { data } = await getSessionInfo(thoughtSpotHost);
     const token = data.configInfo.mixpanelAccessToken;
     if (token) {
