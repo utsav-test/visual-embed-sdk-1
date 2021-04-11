@@ -50,7 +50,7 @@ export async function initMixpanel(thoughtSpotHost: string): Promise<any> {
     }
 
     const { data } = await getSessionInfo(thoughtSpotHost);
-    const token = data.configInfo.mixpanelAccessToken;
+    const token = data.configInfo?.mixpanelAccessToken;
     if (token) {
         mixpanel.init(data.configInfo.mixpanelAccessToken);
         setEventCollectorOn();
