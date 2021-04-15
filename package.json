@@ -27,7 +27,8 @@
         "publish-prod": "npm publish --tag prod"
     },
     "dependencies": {
-        "mixpanel-browser": "^2.41.0"
+        "mixpanel-browser": "^2.41.0",
+        "gatsby": "3.1.0"
     },
     "devDependencies": {
         "@mdx-js/mdx": "^1.6.22",
@@ -48,7 +49,6 @@
         "eslint-import-resolver-typescript": "^2.3.0",
         "eslint-plugin-import": "^2.22.1",
         "eslint-plugin-prettier": "^3.1.4",
-        "gatsby": "3.1.0",
         "gatsby-plugin-catch-links": "^3.1.0",
         "gatsby-plugin-intl": "^0.3.3",
         "gatsby-plugin-local-search": "^2.0.0",

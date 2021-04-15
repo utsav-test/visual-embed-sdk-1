@@ -1,5 +1,5 @@
 import * as mixpanel from 'mixpanel-browser';
-import { EmbedConfig } from "./types";
+import { EmbedConfig } from './types';
 
 export const MIXPANEL_EVENT = {
     VISUAL_SDK_RENDER_START: 'visual-sdk-render-start',
@@ -43,7 +43,7 @@ function emptyQueue() {
     });
 }
 
-export function initMixpanel(thoughtSpotHost: string, config: EmbedConfig, data: any): void {
+export function initMixpanel(config: EmbedConfig, data: any): void {
     uploadMixpanelEvent(MIXPANEL_EVENT.VISUAL_SDK_CALLED_INIT, {
         authType: config.authType,
         host: config.thoughtSpotHost,

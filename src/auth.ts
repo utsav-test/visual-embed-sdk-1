@@ -23,14 +23,13 @@ export const EndPoints = {
  */
 async function isLoggedIn(
     thoughtSpotHost: string,
-    config: EmbedConfig,
+    embedConfig: EmbedConfig,
 ): Promise<boolean> {
-    debugger;
     const authVerificationUrl = `${thoughtSpotHost}${EndPoints.AUTH_VERIFICATION}`;
     const response = await fetch(authVerificationUrl, {
         credentials: 'include',
     });
-    response.json().then(data => initMixpanel(config.thoughtSpotHost, config, data));
+    response.json().then((data) => initMixpanel(embedConfig, data));
     return response.status === 200;
 }
 
