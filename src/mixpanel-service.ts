@@ -1,5 +1,5 @@
 import * as mixpanel from 'mixpanel-browser';
-import { getSessionInfo } from './auth';
+import { EmbedConfig } from "./types";
 
 export const MIXPANEL_EVENT = {
     VISUAL_SDK_RENDER_START: 'visual-sdk-render-start',
@@ -43,13 +43,14 @@ function emptyQueue() {
     });
 }
 
-export async function initMixpanel(thoughtSpotHost: string): Promise<any> {
+export function initMixpanel(thoughtSpotHost: string, config: EmbedConfig, data: any): void {
+    uploadMixpanelEvent(MIXPANEL_EVENT.VISUAL_SDK_CALLED_INIT, {
+        authType: config.authType,
+        host: config.thoughtSpotHost,
+    });
     if (nodeEnv === TEST_ENV) {
-        Promise.resolve();
         return;
     }
-
-    const { data } = await getSessionInfo(thoughtSpotHost);
     const token = data.configInfo?.mixpanelAccessToken;
     if (token) {
         mixpanel.init(data.configInfo.mixpanelAccessToken);

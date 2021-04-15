@@ -1,3 +1,5 @@
+import { config } from 'gatsby/dist/redux/reducers';
+import { initMixpanel } from './mixpanel-service';
 import { AuthType, EmbedConfig, EmbedEvent } from './types';
 import { appendToUrlHash } from './utils';
 
@@ -19,19 +21,17 @@ export const EndPoints = {
  * Check if we are logged into the ThoughtSpot cluster
  * @param thoughtSpotHost The ThoughtSpot cluster hostname or IP
  */
-export async function getSessionInfo(
+async function isLoggedIn(
     thoughtSpotHost: string,
-): Promise<{ loggedIn: boolean; data: any }> {
+    config: EmbedConfig,
+): Promise<boolean> {
+    debugger;
     const authVerificationUrl = `${thoughtSpotHost}${EndPoints.AUTH_VERIFICATION}`;
     const response = await fetch(authVerificationUrl, {
         credentials: 'include',
     });
-    const data = await response.json();
-
-    return {
-        data,
-        loggedIn: response.status === 200,
-    };
+    response.json().then(data => initMixpanel(config.thoughtSpotHost, config, data));
+    return response.status === 200;
 }
 
 /**
@@ -71,7 +71,7 @@ export const doTokenAuth = async (embedConfig: EmbedConfig): Promise<void> => {
             'Either auth endpoint or getAuthToken function must be provided',
         );
     }
-    const { loggedIn } = await getSessionInfo(thoughtSpotHost);
+    const loggedIn = await isLoggedIn(thoughtSpotHost, embedConfig);
     if (!loggedIn) {
         let authToken = null;
         if (getAuthToken) {
@@ -102,7 +102,7 @@ export const doTokenAuth = async (embedConfig: EmbedConfig): Promise<void> => {
  */
 export const doBasicAuth = async (embedConfig: EmbedConfig): Promise<void> => {
     const { thoughtSpotHost, username, password } = embedConfig;
-    const { loggedIn } = await getSessionInfo(thoughtSpotHost);
+    const loggedIn = await isLoggedIn(thoughtSpotHost, embedConfig);
     if (!loggedIn) {
         const response = await fetch(
             `${thoughtSpotHost}${EndPoints.BASIC_LOGIN}`,
@@ -165,7 +165,7 @@ async function samlPopupFlow(ssoURL: string) {
  */
 export const doSamlAuth = async (embedConfig: EmbedConfig): Promise<void> => {
     const { thoughtSpotHost } = embedConfig;
-    const { loggedIn } = await getSessionInfo(thoughtSpotHost);
+    const loggedIn = await isLoggedIn(thoughtSpotHost, embedConfig);
     if (loggedIn) {
         if (isAtSSORedirectUrl()) {
             removeSSORedirectUrlMarker();

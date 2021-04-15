@@ -63,15 +63,9 @@ const handleAuth = () => {
  * @param embedConfig The configuration object containing ThoughtSpot host,
  * authentication mechanism and so on.
  */
-export const init = async (embedConfig: EmbedConfig): Promise<void> => {
+export const init = (embedConfig: EmbedConfig): void => {
     config = embedConfig;
     handleAuth();
-
-    await initMixpanel(config.thoughtSpotHost);
-    uploadMixpanelEvent(MIXPANEL_EVENT.VISUAL_SDK_CALLED_INIT, {
-        authType: config.authType,
-        host: config.thoughtSpotHost,
-    });
 };
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
