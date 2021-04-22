@@ -1,6 +1,10 @@
 import * as mixpanel from 'mixpanel-browser';
 import { EmbedConfig } from './types';
 
+export const EndPoints = {
+    CONFIG: '/callosum/v1/system/config',
+};
+
 export const MIXPANEL_EVENT = {
     VISUAL_SDK_RENDER_START: 'visual-sdk-render-start',
     VISUAL_SDK_CALLED_INIT: 'visual-sdk-called-init',
@@ -43,18 +47,23 @@ function emptyQueue() {
     });
 }
 
-export function initMixpanel(config: EmbedConfig, data: any): void {
-    uploadMixpanelEvent(MIXPANEL_EVENT.VISUAL_SDK_CALLED_INIT, {
-        authType: config.authType,
-        host: config.thoughtSpotHost,
-    });
+export async function initMixpanel(config: EmbedConfig): Promise<void>{
     if (nodeEnv === TEST_ENV) {
         return;
     }
-    const token = data.configInfo?.mixpanelAccessToken;
-    if (token) {
-        mixpanel.init(data.configInfo.mixpanelAccessToken);
-        setEventCollectorOn();
-        emptyQueue();
-    }
+    const { thoughtSpotHost } = config;
+    fetch(`${thoughtSpotHost}${EndPoints.CONFIG}`)
+        .then(response => response.json())
+        .then(data => {
+            const token = data.mixpanelAccessToken;
+            if (token) {
+                mixpanel.init(token);
+                setEventCollectorOn();
+                emptyQueue();
+                uploadMixpanelEvent(MIXPANEL_EVENT.VISUAL_SDK_CALLED_INIT, {
+                    authType: config.authType,
+                    host: config.thoughtSpotHost,
+                });
+            }
+        });
 }

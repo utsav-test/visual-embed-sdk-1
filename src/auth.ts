@@ -1,5 +1,4 @@
 import { config } from 'gatsby/dist/redux/reducers';
-import { initMixpanel } from './mixpanel-service';
 import { AuthType, EmbedConfig, EmbedEvent } from './types';
 import { appendToUrlHash } from './utils';
 
@@ -21,15 +20,11 @@ export const EndPoints = {
  * Check if we are logged into the ThoughtSpot cluster
  * @param thoughtSpotHost The ThoughtSpot cluster hostname or IP
  */
-async function isLoggedIn(
-    thoughtSpotHost: string,
-    embedConfig: EmbedConfig,
-): Promise<boolean> {
+async function isLoggedIn(thoughtSpotHost: string): Promise<boolean> {
     const authVerificationUrl = `${thoughtSpotHost}${EndPoints.AUTH_VERIFICATION}`;
     const response = await fetch(authVerificationUrl, {
         credentials: 'include',
     });
-    response.json().then((data) => initMixpanel(embedConfig, data));
     return response.status === 200;
 }
 
@@ -70,7 +65,7 @@ export const doTokenAuth = async (embedConfig: EmbedConfig): Promise<void> => {
             'Either auth endpoint or getAuthToken function must be provided',
         );
     }
-    const loggedIn = await isLoggedIn(thoughtSpotHost, embedConfig);
+    const loggedIn = await isLoggedIn(thoughtSpotHost);
     if (!loggedIn) {
         let authToken = null;
         if (getAuthToken) {
@@ -101,7 +96,7 @@ export const doTokenAuth = async (embedConfig: EmbedConfig): Promise<void> => {
  */
 export const doBasicAuth = async (embedConfig: EmbedConfig): Promise<void> => {
     const { thoughtSpotHost, username, password } = embedConfig;
-    const loggedIn = await isLoggedIn(thoughtSpotHost, embedConfig);
+    const loggedIn = await isLoggedIn(thoughtSpotHost);
     if (!loggedIn) {
         const response = await fetch(
             `${thoughtSpotHost}${EndPoints.BASIC_LOGIN}`,
@@ -164,7 +159,7 @@ async function samlPopupFlow(ssoURL: string) {
  */
 export const doSamlAuth = async (embedConfig: EmbedConfig): Promise<void> => {
     const { thoughtSpotHost } = embedConfig;
-    const loggedIn = await isLoggedIn(thoughtSpotHost, embedConfig);
+    const loggedIn = await isLoggedIn(thoughtSpotHost);
     if (loggedIn) {
         if (isAtSSORedirectUrl()) {
             removeSSORedirectUrlMarker();

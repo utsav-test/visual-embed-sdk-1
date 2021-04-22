@@ -66,6 +66,7 @@ const handleAuth = () => {
 export const init = (embedConfig: EmbedConfig): void => {
     config = embedConfig;
     handleAuth();
+    initMixpanel(embedConfig);
 };
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
