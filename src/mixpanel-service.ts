@@ -47,14 +47,14 @@ function emptyQueue() {
     });
 }
 
-export async function initMixpanel(config: EmbedConfig): Promise<void>{
+export async function initMixpanel(config: EmbedConfig): Promise<void> {
     if (nodeEnv === TEST_ENV) {
         return;
     }
     const { thoughtSpotHost } = config;
     fetch(`${thoughtSpotHost}${EndPoints.CONFIG}`)
-        .then(response => response.json())
-        .then(data => {
+        .then((response) => response.json())
+        .then((data) => {
             const token = data.mixpanelAccessToken;
             if (token) {
                 mixpanel.init(token);
