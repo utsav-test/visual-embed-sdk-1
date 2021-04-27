@@ -15,7 +15,7 @@ const MIXPANEL_EVENT = {
 
 describe('Unit test for mixpanel', () => {
     test('initMixpanel', async () => {
-        initMixpanel(config).then(result  => {
+        initMixpanel(config).then((result) => {
             spyOn(mixpanel, 'init');
             expect(mixpanel.init).toHaveBeenCalled();
             uploadMixpanelEvent(MIXPANEL_EVENT.VISUAL_SDK_CALLED_INIT, {

@@ -49,10 +49,10 @@ function emptyQueue() {
 
 export async function initMixpanel(config: EmbedConfig): Promise<any> {
     if (nodeEnv === TEST_ENV) {
-        return;
+        return Promise.resolve();
     }
     const { thoughtSpotHost } = config;
-   return fetch(`${thoughtSpotHost}${EndPoints.CONFIG}`)
+    return fetch(`${thoughtSpotHost}${EndPoints.CONFIG}`)
         .then((response) => response.json())
         .then((data) => {
             const token = data.mixpanelAccessToken;
