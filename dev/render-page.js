@@ -3875,7 +3875,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const addExpandCollapseImages = (navContent, pageId) => {
+const addExpandCollapseImages = (navContent, pageId, tabsClosed) => {
   const nav = document.createElement('div');
   nav.innerHTML = navContent;
   nav.classList.add('navWrapper');
@@ -3887,8 +3887,14 @@ const addExpandCollapseImages = (navContent, pageId) => {
       const spanElement = document.createElement('span');
       spanElement.classList.add('iconSpan');
       const imageElement = document.createElement('img');
-      imageElement.src = _assets_svg_arrowForward_svg__WEBPACK_IMPORTED_MODULE_1__.default;
-      divElement.classList.add('displayNone'); //Checking if this div contains the active link
+
+      if (tabsClosed.includes(index)) {
+        imageElement.src = _assets_svg_arrowForward_svg__WEBPACK_IMPORTED_MODULE_1__.default;
+        divElement.classList.add('displayNone');
+      } else {
+        imageElement.src = _assets_svg_arrowDown_svg__WEBPACK_IMPORTED_MODULE_0__.default;
+      } //Checking if this div contains the active link
+
 
       const allLinks = divElement.querySelectorAll('a');
 
@@ -3909,7 +3915,7 @@ const addExpandCollapseImages = (navContent, pageId) => {
   });
   return nav.innerHTML;
 };
-const collapseAndExpandLeftNav = (doc, setLeftNavOpen) => {
+const collapseAndExpandLeftNav = (doc, setLeftNavOpen, toggleExpandOnTab) => {
   doc.querySelectorAll(_constants_selectorsContant__WEBPACK_IMPORTED_MODULE_2__.default.headings).forEach((tag, index) => {
     const divElement = doc.querySelectorAll(_constants_selectorsContant__WEBPACK_IMPORTED_MODULE_2__.default.linksContainer)[index]; //Adding click listener to the headings
 
@@ -3917,6 +3923,7 @@ const collapseAndExpandLeftNav = (doc, setLeftNavOpen) => {
       divElement.classList.toggle('displayNone');
       const img = divElement.parentElement.children[0].children[0].children[0];
       img.src = divElement.classList.contains('displayNone') ? _assets_svg_arrowForward_svg__WEBPACK_IMPORTED_MODULE_1__.default : _assets_svg_arrowDown_svg__WEBPACK_IMPORTED_MODULE_0__.default;
+      toggleExpandOnTab(index);
     }); //Adding click listener to close left nav when in mobile resolution
 
     doc.querySelectorAll(_constants_selectorsContant__WEBPACK_IMPORTED_MODULE_2__.default.links).forEach(link => {
@@ -3996,6 +4003,7 @@ const LeftSideBar = props => {
     ref,
     height
   } = (0,react_resize_detector__WEBPACK_IMPORTED_MODULE_10__.useResizeDetector)();
+  const expandedTabsRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)([]);
   const isMaxTabletResolution = !(props.docWidth < _constants_uiConstants__WEBPACK_IMPORTED_MODULE_4__.MAX_TABLET_RESOLUTION);
   const isMaxMobileResolution = !(props.docWidth < _constants_uiConstants__WEBPACK_IMPORTED_MODULE_4__.MAX_MOBILE_RESOLUTION);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -4007,19 +4015,23 @@ const LeftSideBar = props => {
       tag.classList.add('active');
     }
 
-    const updatedHTML = (0,_helper__WEBPACK_IMPORTED_MODULE_5__.addExpandCollapseImages)(divElement.innerHTML, params[_configs_doc_configs__WEBPACK_IMPORTED_MODULE_3__.TS_PAGE_ID_PARAM]);
+    const updatedHTML = (0,_helper__WEBPACK_IMPORTED_MODULE_5__.addExpandCollapseImages)(divElement.innerHTML, params[_configs_doc_configs__WEBPACK_IMPORTED_MODULE_3__.TS_PAGE_ID_PARAM], expandedTabsRef.current);
     setNavContent(updatedHTML);
   }, [params[_configs_doc_configs__WEBPACK_IMPORTED_MODULE_3__.NAV_PREFIX], params[_configs_doc_configs__WEBPACK_IMPORTED_MODULE_3__.TS_PAGE_ID_PARAM], props.navContent]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     props.handleLeftNavChange(width);
   }, [width]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    (0,_helper__WEBPACK_IMPORTED_MODULE_5__.collapseAndExpandLeftNav)(ref.current, props.setLeftNavOpen);
+    (0,_helper__WEBPACK_IMPORTED_MODULE_5__.collapseAndExpandLeftNav)(ref.current, props.setLeftNavOpen, toggleExpandOnTab);
   }, [params[_configs_doc_configs__WEBPACK_IMPORTED_MODULE_3__.TS_PAGE_ID_PARAM], isMaxMobileResolution, navContent]);
 
   const onMenuClick = () => {
     props.setLeftNavOpen(!props.leftNavOpen);
     document.documentElement.scrollTop = 0;
+  };
+
+  const toggleExpandOnTab = tabIndex => {
+    expandedTabsRef.current = expandedTabsRef.current.includes(tabIndex) ? expandedTabsRef.current.filter(idx => idx !== tabIndex) : [...expandedTabsRef.current, tabIndex];
   };
 
   const renderLeftNav = () => {
@@ -80234,7 +80246,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"polyfill":["/polyfill-59a7bd5b74657530f8e9.js"],"app":["/app-22ad56411f4ecab96681.js"],"component---docs-src-pages-404-tsx":["/component---docs-src-pages-404-tsx-35699d6f1096ae73d1f8.js"],"component---docs-src-pages-index-tsx":["/component---docs-src-pages-index-tsx-5357b53a1790447e8468.js"]}');
+module.exports = JSON.parse('{"polyfill":["/polyfill-59a7bd5b74657530f8e9.js"],"app":["/app-22ad56411f4ecab96681.js"],"component---docs-src-pages-404-tsx":["/component---docs-src-pages-404-tsx-35699d6f1096ae73d1f8.js"],"component---docs-src-pages-index-tsx":["/component---docs-src-pages-index-tsx-9039bf8d891628e73f48.js"]}');
 
 /***/ }),
 
