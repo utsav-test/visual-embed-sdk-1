@@ -2,6 +2,7 @@ import React from 'react';
 import ArrowDown from '../../assets/svg/arrowDown.svg';
 import ArrowForward from '../../assets/svg/arrowForward.svg';
 import selectors from '../../constants/selectorsContant';
+import ExternalLinkIcon from '../../assets/svg/externalLink.svg';
 
 export const addExpandCollapseImages = (navContent: string, pageId: string, tabsClosed: number[]) => {
     const nav = document.createElement('div');
@@ -39,6 +40,7 @@ export const addExpandCollapseImages = (navContent: string, pageId: string, tabs
             tag.appendChild(spanElement);
         }
     });
+    nav.innerHTML = addExternalLinkIcon(nav.innerHTML);
     return nav.innerHTML;
 };
 
@@ -89,4 +91,17 @@ export const getAllPageIds = (navContent: string): string[] => {
         }
     });
     return allPageIds;
+};
+
+//Adding external icon to the external links
+const addExternalLinkIcon = (navContent: string): string => {
+    const divElement = document.createElement('div');
+    divElement.innerHTML = navContent;
+    divElement.querySelectorAll('a[target="_blank"]').forEach(link => {
+        const imgElement = document.createElement('img');
+        imgElement.classList.add('externalLinkIcon');
+        imgElement.src = ExternalLinkIcon;
+        link.appendChild(imgElement);
+    });
+    return divElement.innerHTML;
 };

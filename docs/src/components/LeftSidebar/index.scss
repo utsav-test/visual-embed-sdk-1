@@ -155,6 +155,18 @@ aside {
     hr {
         display: none;
     }
+
+    .externalLinkIcon {
+        width: 18px;
+        margin-left: 10px;
+        position: relative;
+        top: -2px;
+    }
+
+    a[target='_blank'] {
+        display: flex;
+        align-items: center;
+    }
 }
 
 /* Overriding react-resizable package class to match UI */
