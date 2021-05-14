@@ -1,6 +1,7 @@
 import hljs from 'highlight.js';
 import t from '../../utils/lang-utils';
 import Copy from '../../assets/svg/copy.svg';
+import selectors from '../../constants/selectorsContant';
 
 export const enableCopyToClipboard = (
     element: HTMLElement,
@@ -30,7 +31,7 @@ export const enableCopyToClipboard = (
 export const customizeDocContent = () => {
     /* To get all the code blocks from document */
     document
-        .querySelectorAll('.listingblock>.content>.highlight>code')
+        .querySelectorAll(selectors.codeBlocks)
         .forEach((tag) => {
             const buttonElement = document.createElement('button');
             buttonElement.setAttribute('class', 'copyButton');
@@ -53,4 +54,36 @@ export const customizeDocContent = () => {
     document.querySelectorAll('pre code').forEach((block) => {
         hljs.highlightBlock(block as HTMLElement);
     });
+};
+
+//Checks if the HTML element is in viewport.
+const isInViewport = (el: HTMLElement) => {
+    const rect = el.getBoundingClientRect();
+    return (
+        rect.top >= 0 &&
+        rect.left >= 0 
+    );
+}
+
+export const addScrollListener = () => {
+    document.addEventListener('scroll', () => {
+        const subLinks = document.querySelectorAll(selectors.docmapLinks);
+        let flag = false;
+        subLinks.forEach((link, i: number) => {
+            const href = (link as HTMLAnchorElement).href;
+            const hash = href.split('#')[1];
+            if (hash) {
+                const targetElement = document.getElementById(hash)?.parentElement;
+                if (targetElement) {
+                    const isVisible = isInViewport(targetElement as HTMLElement);
+                    if (isVisible && !flag) {
+                        link.classList.add('active');
+                        flag = !flag;
+                    } else {
+                        link.classList.remove('active')
+                    }
+                }
+            }
+        });
+    })
 };
