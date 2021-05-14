@@ -164,6 +164,10 @@
         }
     }
 
+    .hdlist1 {
+        font-size: $font-size-doc;
+    }
+
     .admonitionblock {
         tr,
         th,
@@ -175,6 +179,12 @@
     .dlist {
         dd {
             margin-bottom: $margin-links;
+        }
+    }
+
+    .admonitionblock {
+        code {
+            font-family: Optimo-Plain;
         }
     }
 }
