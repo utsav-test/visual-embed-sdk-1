@@ -65,5 +65,8 @@ export async function initMixpanel(config: EmbedConfig): Promise<any> {
                     host: config.thoughtSpotHost,
                 });
             }
+        })
+        .catch((e) => {
+            console.warn('Failed to initialize mixpanel', e);
         });
 }

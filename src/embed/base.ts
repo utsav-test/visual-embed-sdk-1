@@ -66,7 +66,8 @@ const handleAuth = () => {
 export const init = (embedConfig: EmbedConfig): void => {
     config = embedConfig;
     handleAuth();
-    initMixpanel(embedConfig);
+    // Config call is not public API and fails to load
+    //initMixpanel(embedConfig);
 };
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
