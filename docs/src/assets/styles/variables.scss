@@ -68,6 +68,7 @@ $height-search-input: 32px;
 $margin-search-result: 16px;
 $padding-left-search-input: 36px;
 $font-family-code: Consolas, Monaco, monospace;
+$text-color-code-lang: $darkgrey;
 $font-family-doc: Optimo-Plain;
 $font-family-back-button: Optimo-Plain;
 $width-back-button: 32px;
@@ -102,7 +103,7 @@ $rem-base: 18;
 $body-font-size-desktop: 1.125em; /* 18px */
 $body-font-size-print: 0.9375em; /* 15px */
 $body-line-height: 1.15;
-$body-font-color: $color-jet-70;
+$body-background-color: $white; 
 $body-font-family: 'Roboto', sans-serif;
 $body-font-weight-bold: 500;
 $monospace-font-family: 'Roboto Mono', monospace;

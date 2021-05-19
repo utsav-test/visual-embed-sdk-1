@@ -5,7 +5,7 @@
     border-bottom: 1px $lightgrey solid;
     position: fixed;
     width: calc(100% - #{$docmap-width-desktop});
-    background: $white;
+    background: $body-background-color;
     z-index: $z-index-search;
 }
 
@@ -41,11 +41,12 @@
 
     .resultContainer {
         position: absolute;
-        background-color: $white;
+        background-color: $body-background-color;
         width: 100%;
         max-height: $result-container-max-height;
         top: 38px;
         border-radius: 6px;
+        border: 1px solid $lightgrey;
         box-shadow: $box-shadow-search-box;
         overflow: auto;
     }
@@ -73,14 +74,10 @@
             line-height: $line-height-result-footer;
             color: $darkgrey;
         }
-    }
-
-    .textContainer {
-        cursor: pointer;
-    }
-
-    .textContainer:hover {
+        &:hover{
         background: $text-container-background;
+        }
+        cursor: pointer;
     }
 
     .active {

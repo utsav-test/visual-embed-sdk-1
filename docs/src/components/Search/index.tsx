@@ -99,14 +99,14 @@ const Search: React.FC<SearchProps> = (props) => {
                     value={props.keyword}
                     onChange={props.onChange}
                 />
-                {showSearchResult && (
+                {(showSearchResult && props.options?.length) ? (
                     <div ref={node} className="resultContainer">
                         {props.options.map(
                             (option: SearchQueryResult, index: number) => {
                                 return option.type !== 'html' ? (
                                     <div
                                         key={option.pageid}
-                                        className="result"
+                                        className={`result ${index === highlightedIndex && 'active'}`}
                                         onClick={() =>
                                             props.optionSelected(option.pageid)
                                         }
@@ -124,7 +124,7 @@ const Search: React.FC<SearchProps> = (props) => {
                                 ) : (
                                     <a
                                         key={option.pageid}
-                                        className="result"
+                                        className={`result ${index === highlightedIndex && 'active'}`}
                                         href={option.link}
                                         target="_blank"
                                         ref={anchor}
@@ -141,7 +141,7 @@ const Search: React.FC<SearchProps> = (props) => {
                             },
                         )}
                     </div>
-                )}
+                ) : ''}
             </div>
         </div>
     );

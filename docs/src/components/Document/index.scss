@@ -22,7 +22,7 @@
         line-height: $line-height-doc;
 
         code {
-            background: $lightgrey;
+            background: $code-block-color;
             font-family: $font-family-code;
         }
     }
@@ -53,6 +53,7 @@
 
         code {
             max-width: 88%;
+            overflow-wrap: break-word;
             font-family: $font-family-code;
         }
 
@@ -66,7 +67,7 @@
                 top: -15px;
                 right: 36px;
                 text-transform: uppercase;
-                color: $darkgrey;
+                color: $text-color-code-lang;
             }
 
             .copyButton {

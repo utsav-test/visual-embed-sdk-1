@@ -9,8 +9,7 @@ type SearchResultProps = {
 
 const SearchResult = (props: SearchResultProps) => (
     <div
-        className={`textContainer 
-        ${props.index === props.highlightedIndex && 'active'}`}
+        className="textContainer"
     >
         <p className="title">{props.keyword}</p>
         <p className="footer">{props.title}</p>

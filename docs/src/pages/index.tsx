@@ -211,7 +211,7 @@ const IndexPage = ({ location }) => {
             {isPublicSiteOpen && <Header />}
             <main
                 ref={ref as React.RefObject<HTMLDivElement>}
-                className={isPublicSiteOpen ? 'withHeaderFooter' : ''}
+                className={`dark ${isPublicSiteOpen ? 'withHeaderFooter' : ''}`}
                 style={{
                     height: !docContent && MAIN_HEIGHT_WITHOUT_DOC_CONTENT,
                 }}
