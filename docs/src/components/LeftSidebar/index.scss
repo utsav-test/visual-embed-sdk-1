@@ -167,6 +167,11 @@ aside {
         display: flex;
         align-items: center;
     }
+
+    .linkTitle {
+        display: flex;
+        cursor: pointer;
+    }
 }
 
 /* Overriding react-resizable package class to match UI */

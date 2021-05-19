@@ -34,7 +34,7 @@ const LeftSideBar = (props: {
     const [navContent, setNavContent] = useState('');
     const { width, ref, height } = useResizeDetector();
 
-    const expandedTabsRef = useRef([]);
+    const expandedTabsRef = useRef({});
 
     const isMaxTabletResolution = !(props.docWidth < MAX_TABLET_RESOLUTION);
     const isMaxMobileResolution = !(props.docWidth < MAX_MOBILE_RESOLUTION);
@@ -73,10 +73,14 @@ const LeftSideBar = (props: {
         document.documentElement.scrollTop = 0;
     };
 
-    const toggleExpandOnTab = (tabIndex: number) => {
-        expandedTabsRef.current = expandedTabsRef.current.includes(tabIndex) ?
-            expandedTabsRef.current.filter(idx => idx !== tabIndex) :
-            [...expandedTabsRef.current, tabIndex];
+    const toggleExpandOnTab = (text: string) => {
+        const allTabsRef = { ...expandedTabsRef.current };
+        if (allTabsRef[text] !== undefined) {
+            allTabsRef[text] = !allTabsRef[text];
+        } else {
+            allTabsRef[text] = true;
+        }
+        expandedTabsRef.current = { ...allTabsRef };
     };
 
     const renderLeftNav = () => {

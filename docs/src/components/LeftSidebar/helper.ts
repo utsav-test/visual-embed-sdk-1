@@ -4,75 +4,90 @@ import ArrowForward from '../../assets/svg/arrowForward.svg';
 import selectors from '../../constants/selectorsContant';
 import ExternalLinkIcon from '../../assets/svg/externalLink.svg';
 
-export const addExpandCollapseImages = (navContent: string, pageId: string, tabsClosed: number[]) => {
+export const addExpandCollapseImages = (
+    navContent: string,
+    pageId: string,
+    tabsClosed: { [key: string]: boolean },
+) => {
     const nav = document.createElement('div');
     nav.innerHTML = navContent;
     nav.classList.add('navWrapper');
-    nav.querySelectorAll(selectors.headings).forEach((tag, index) => {
-        const divElement = nav.querySelectorAll(
-            selectors.linksContainer,
-        )[index];
-        if (!!divElement) {
-            //Creating arrow icons to be added
-            const spanElement = document.createElement('span');
-            spanElement.classList.add('iconSpan');
-            const imageElement = document.createElement('img');
-            if (tabsClosed.includes(index)) {
-                imageElement.src = ArrowForward;
-                divElement.classList.add('displayNone');
-            } else {
-                imageElement.src = ArrowDown;
-            }
 
-            //Checking if this div contains the active link
-            const allLinks = divElement.querySelectorAll('a');
-            for (let i = 0; i < allLinks.length; i++) {
-                const splitArr = allLinks[i].href.split('=');
-                if (splitArr.length > 1 && splitArr[1] === pageId) {
+    nav.querySelectorAll('li').forEach((el, i) => {
+        if (el.children.length === 2) {
+            const paragraphElement = el.children[0];
+            if (paragraphElement.childNodes.length < 2) {
+                paragraphElement.classList.add('linkTitle');
+                const text = (paragraphElement as HTMLParagraphElement)
+                    .innerText;
+                //Creating arrow icons to be added
+                const spanElement = document.createElement('span');
+                spanElement.classList.add('iconSpan');
+                const imageElement = document.createElement('img');
+                if (tabsClosed[text] === undefined || !tabsClosed[text]) {
                     imageElement.src = ArrowDown;
-                    divElement.classList.remove('displayNone');
-                    break;
+                } else {
+                    imageElement.src = ArrowForward;
+                    el.children[1].classList.add('displayNone');
                 }
-            }
 
-            //Adding arrow icon to the p tags
-            spanElement.appendChild(imageElement);
-            tag.appendChild(spanElement);
+                //Checking if this div contains the active link
+                const allLinks = el.children[1].querySelectorAll('a');
+                for (let i = 0; i < allLinks.length; i++) {
+                    const splitArr = allLinks[i].href.split('=');
+                    if (splitArr.length > 1 && splitArr[1] === pageId) {
+                        imageElement.src = ArrowDown;
+                        el.children[1].classList.remove('displayNone');
+                        break;
+                    }
+                }
+
+                //Adding arrow icon to the p tags
+                spanElement.appendChild(imageElement);
+                paragraphElement.appendChild(spanElement);
+            }
         }
     });
+
     nav.innerHTML = addExternalLinkIcon(nav.innerHTML);
     return nav.innerHTML;
 };
 
-export const collapseAndExpandLeftNav = (doc: HTMLDivElement, setLeftNavOpen: Function, toggleExpandOnTab: Function) => {
-    doc
-    .querySelectorAll(selectors.headings)
-    .forEach((tag, index) => {
-        const divElement = doc.querySelectorAll(
-            selectors.linksContainer,
-        )[index];
-
-        //Adding click listener to the headings
-        tag.addEventListener('click', () => {
-            divElement.classList.toggle('displayNone');
-            const img = divElement.parentElement.children[0].children[0]
-                .children[0] as HTMLImageElement;
-            img.src = divElement.classList.contains('displayNone')
-                ? ArrowForward
-                : ArrowDown;
-            toggleExpandOnTab(index);
+export const collapseAndExpandLeftNav = (
+    doc: HTMLDivElement,
+    setLeftNavOpen: Function,
+    toggleExpandOnTab: Function,
+) => {
+    //Adding click listener to close left nav when in mobile resolution
+    doc.querySelectorAll(selectors.links).forEach((link) => {
+        link.addEventListener('click', () => {
+            setLeftNavOpen(false);
         });
+    });
 
-        //Adding click listener to close left nav when in mobile resolution
-        doc
-            .querySelectorAll(
-                selectors.links,
-            )
-            .forEach((link) => {
-                link.addEventListener('click', () => {
-                    setLeftNavOpen(false);
+    doc.querySelectorAll('li').forEach((el, i) => {
+        if (el.children.length === 2) {
+            const spanElement =
+                el.children[0].children.length === 2
+                    ? el.children[0].children[1]
+                    : el.children[0].children[0];
+            if (spanElement) {
+                //Adding click listener to the headings
+                spanElement.addEventListener('click', () => {
+                    const divElement = el.children[1];
+                    toggleExpandOnTab(
+                        (el.children[0] as HTMLParagraphElement).innerText,
+                    );
+                    divElement.classList.toggle('displayNone');
+                    (spanElement
+                        .children[0] as HTMLImageElement).src = divElement.classList.contains(
+                        'displayNone',
+                    )
+                        ? ArrowForward
+                        : ArrowDown;
                 });
-            });
+            }
+        }
     });
 };
 
@@ -97,7 +112,7 @@ export const getAllPageIds = (navContent: string): string[] => {
 const addExternalLinkIcon = (navContent: string): string => {
     const divElement = document.createElement('div');
     divElement.innerHTML = navContent;
-    divElement.querySelectorAll('a[target="_blank"]').forEach(link => {
+    divElement.querySelectorAll('a[target="_blank"]').forEach((link) => {
         const imgElement = document.createElement('img');
         imgElement.classList.add('externalLinkIcon');
         imgElement.src = ExternalLinkIcon;
