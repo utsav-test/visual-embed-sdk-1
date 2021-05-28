@@ -27,11 +27,11 @@ body {
     padding: $gutter;
     font-family: 'Optimo-Plain';
     font-size: $font-size-normal;
-    background-color: $body-background-color;
 }
 
 main {
     display: flow-root;
+    background-color: var(--body-background-color);
 }
 
 main.withHeaderFooter {
@@ -103,6 +103,10 @@ button {
 
 .displayNone {
     display: none;
+}
+
+.icon {
+    color: var(--icon-color);
 }
 
 /*Scrollbar styling start*/

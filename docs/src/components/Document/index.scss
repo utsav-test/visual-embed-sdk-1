@@ -5,7 +5,7 @@
 .documentWrapper {
     width: calc(100% - #{$docmap-width-desktop});
     padding: $padding-md;
-    color: $primarycolor;
+    color: var(--primary-color);
 
     /* In order to hide TOC in main component */
     #toc {
@@ -22,7 +22,7 @@
         line-height: $line-height-doc;
 
         code {
-            background: $code-block-color;
+            background: var(--code-block-color);
             font-family: $font-family-code;
         }
     }
@@ -37,7 +37,7 @@
 
     pre {
         white-space: pre-wrap;
-        background: $code-block-color;
+        background: var(--code-block-color);
         padding: 20px 10px;
         display: flex;
         justify-content: space-between;
@@ -67,7 +67,7 @@
                 top: -15px;
                 right: 36px;
                 text-transform: uppercase;
-                color: $text-color-code-lang;
+                color: var(--text-color-code-lang);
             }
 
             .copyButton {
@@ -105,7 +105,7 @@
         border-collapse: collapse;
 
         th {
-            border-bottom: 3px solid $borderColor;
+            border-bottom: 3px solid var(--border-color);
             font-size: $font-size-doc;
             padding: $padding-sm;
             text-align: left;
@@ -113,7 +113,7 @@
 
         td {
             font-size: $font-size-table;
-            border-bottom: 1px solid $borderColor;
+            border-bottom: 1px solid var(--border-color);
             padding: $padding-sm;
             text-align: left;
             font-weight: $font-weight-normal;
@@ -124,7 +124,7 @@
         }
 
         tr {
-            border-bottom: 1px solid $borderColor;
+            border-bottom: 1px solid var(--border-color);
         }
     }
 
@@ -194,6 +194,11 @@
         code {
             font-family: Optimo-Plain;
         }
+    }
+
+    .copyIcon {
+        height: $icon-width;
+        width: $icon-height;
     }
 }
 

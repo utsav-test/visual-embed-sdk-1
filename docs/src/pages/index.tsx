@@ -57,6 +57,7 @@ const IndexPage = ({ location }) => {
     const [leftNavOpen, setLeftNavOpen] = useState(false);
     const [keyword, updateKeyword] = useState('');
     const [isPublicSiteOpen, setIsPublicSiteOpen] = useState(false);
+    const [isDarkMode, setDarkMode] = useState(false);
 
     useEffect(() => {
         // based on query params set if public site is open or not
@@ -215,6 +216,7 @@ const IndexPage = ({ location }) => {
                 style={{
                     height: !docContent && MAIN_HEIGHT_WITHOUT_DOC_CONTENT,
                 }}
+                data-theme={isDarkMode ? 'dark' : 'light'}
             >
                 <LeftSidebar
                     navTitle={navTitle}
@@ -226,6 +228,9 @@ const IndexPage = ({ location }) => {
                     setLeftNavOpen={setLeftNavOpen}
                     leftNavOpen={leftNavOpen}
                     isPublicSiteOpen={isPublicSiteOpen}
+                    isMaxMobileResolution={isMaxMobileResolution}
+                    setDarkMode={setDarkMode}
+                    isDarkMode={isDarkMode}
                 />
                 <div
                     className="documentBody"
@@ -244,6 +249,9 @@ const IndexPage = ({ location }) => {
                         optionSelected={optionSelected}
                         leftNavOpen={leftNavOpen}
                         updateKeyword={updateKeyword}
+                        isMaxMobileResolution={isMaxMobileResolution}
+                        setDarkMode={setDarkMode}
+                        isDarkMode={isDarkMode}
                     />
                     <div className="introWrapper">
                         <Document docTitle={docTitle} docContent={docContent} />

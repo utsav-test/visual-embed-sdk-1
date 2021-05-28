@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { ResizableBox } from 'react-resizable';
 import { useResizeDetector } from 'react-resize-detector';
+import { IconContext } from '@react-icons/all-files';
+import { GiHamburgerMenu } from '@react-icons/all-files/gi/GiHamburgerMenu';
+import { MdClear } from '@react-icons/all-files/md/MdClear';
 import queryStringParser from '../../utils/app-utils';
 import { NAV_PREFIX, TS_PAGE_ID_PARAM } from '../../configs/doc-configs';
 import {
@@ -14,8 +17,6 @@ import {
     MAX_MOBILE_RESOLUTION,
 } from '../../constants/uiConstants';
 import { collapseAndExpandLeftNav, addExpandCollapseImages } from './helper';
-import ClearIcon from '../../assets/svg/clear.svg';
-import MenuIcon from '../../assets/svg/menu.svg';
 import NavContent from './NavContent';
 import './index.scss';
 
@@ -25,10 +26,13 @@ const LeftSideBar = (props: {
     backLink: string;
     docWidth: number;
     leftNavOpen: boolean;
+    isMaxMobileResolution: boolean;
+    isDarkMode: boolean;
     handleLeftNavChange: (width: number) => void;
     location: Location;
     setLeftNavOpen: Function;
     isPublicSiteOpen: boolean;
+    setDarkMode: Function;
 }) => {
     const params = queryStringParser(props.location.search);
     const [navContent, setNavContent] = useState('');
@@ -112,21 +116,32 @@ const LeftSideBar = (props: {
                     refObj={ref as React.RefObject<HTMLDivElement>}
                     leftNavOpen={props.leftNavOpen}
                     isPublicSiteOpen={props.isPublicSiteOpen}
+                    isMaxMobileResolution={isMaxMobileResolution}
+                    setDarkMode={props.setDarkMode}
+                    isDarkMode={props.isDarkMode}
                 />
             </ResizableBox>
         ) : (
             <div className="menuMain">
                 <div className="menuContainer">
-                    <img
-                        src={MenuIcon}
-                        className={`${props.leftNavOpen && 'imgOpacity'}`}
-                        onClick={onMenuClick}
-                    />
-                    <img
-                        src={ClearIcon}
-                        className={`${!props.leftNavOpen && 'imgOpacity'}`}
-                        onClick={onMenuClick}
-                    />
+                    <IconContext.Provider
+                        value={{
+                            className: `icon ${
+                                props.leftNavOpen && 'imgOpacity'
+                            }`,
+                        }}
+                    >
+                        <GiHamburgerMenu onClick={onMenuClick} />
+                    </IconContext.Provider>
+                    <IconContext.Provider
+                        value={{
+                            className: `icon ${
+                                !props.leftNavOpen && 'imgOpacity'
+                            } clearIcon`,
+                        }}
+                    >
+                        <MdClear onClick={onMenuClick} />
+                    </IconContext.Provider>
                 </div>
                 <NavContent
                     backLink={props.backLink}
@@ -135,6 +150,9 @@ const LeftSideBar = (props: {
                     refObj={ref as React.RefObject<HTMLDivElement>}
                     leftNavOpen={props.leftNavOpen}
                     isPublicSiteOpen={props.isPublicSiteOpen}
+                    isMaxMobileResolution={isMaxMobileResolution}
+                    setDarkMode={props.setDarkMode}
+                    isDarkMode={props.isDarkMode}
                 />
             </div>
         );
