@@ -98,7 +98,7 @@ const IndexPage = ({ location }) => {
                 // get and set page title
                 setDocTitle(
                     edges[edgeIndex].node.document.title ||
-                    edges[edgeIndex].node.pageAttributes.title,
+                        edges[edgeIndex].node.pageAttributes.title,
                 );
 
                 // get and set doc page content with dynamic data replaced
@@ -213,12 +213,12 @@ const IndexPage = ({ location }) => {
             link: '',
             pageid: 'stringnotfound',
             title: t('KEYWORD_NOT_FOUND_MSG') + ` "${keyword}".`,
-            type: 'text'
+            type: 'text',
         });
     }
 
     return (
-        <>
+        <div id="wrapper" data-theme={isDarkMode ? 'dark' : 'light'}>
             {isPublicSiteOpen && <Header />}
             <main
                 ref={ref as React.RefObject<HTMLDivElement>}
@@ -226,7 +226,6 @@ const IndexPage = ({ location }) => {
                 style={{
                     height: !docContent && MAIN_HEIGHT_WITHOUT_DOC_CONTENT,
                 }}
-                data-theme={isDarkMode ? 'dark' : 'light'}
             >
                 <LeftSidebar
                     navTitle={navTitle}
@@ -274,7 +273,7 @@ const IndexPage = ({ location }) => {
                 </div>
             </main>
             {isPublicSiteOpen && <Footer />}
-        </>
+        </div>
     );
 };
 
