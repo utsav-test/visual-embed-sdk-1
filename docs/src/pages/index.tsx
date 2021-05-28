@@ -32,6 +32,7 @@ import {
 } from '../constants/uiConstants';
 import { SearchQueryResult } from '../interfaces';
 import { getAllPageIds } from '../components/LeftSidebar/helper';
+import t from '../utils/lang-utils';
 
 // markup
 const IndexPage = ({ location }) => {
@@ -97,7 +98,7 @@ const IndexPage = ({ location }) => {
                 // get and set page title
                 setDocTitle(
                     edges[edgeIndex].node.document.title ||
-                        edges[edgeIndex].node.pageAttributes.title,
+                    edges[edgeIndex].node.pageAttributes.title,
                 );
 
                 // get and set doc page content with dynamic data replaced
@@ -206,6 +207,15 @@ const IndexPage = ({ location }) => {
     };
 
     const isMaxMobileResolution = !(width < MAX_MOBILE_RESOLUTION);
+
+    if (keyword && !results.length) {
+        results.push({
+            link: '',
+            pageid: 'stringnotfound',
+            title: t('KEYWORD_NOT_FOUND_MSG') + ` "${keyword}".`,
+            type: 'text'
+        });
+    }
 
     return (
         <>

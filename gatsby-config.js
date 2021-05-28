@@ -17,7 +17,7 @@ const getPathPrefix = () => {
     }
 };
 
-const stripLinks = (text) =>{
+const stripLinks = (text) => {
     if (text) {
         const re = /<a\s.*?href=[\"\'](.*?)[\"\']*?>(.*?)<\/a>/g;
         const str = text;
@@ -26,7 +26,7 @@ const stripLinks = (text) =>{
         return result;
     }
     return '';
-}
+};
 
 const getPath = (path) =>
     getPathPrefix() ? `${path}/${getPathPrefix()}` : path;
@@ -168,7 +168,13 @@ module.exports = {
             options: {
                 name: 'pages',
                 engine: 'flexsearch',
-                engineOptions: 'speed',
+                engineOptions: {
+                    encode: 'icase',
+                    tokenize: 'forward',
+                    threshold: 8,
+                    resolution: 9,
+                    depth: 1,
+                },
                 query: `
                 query {
                     allAsciidoc(sort: { fields: [document___title], order: ASC }) {
@@ -215,7 +221,10 @@ module.exports = {
                             )
                             .map((edge) => {
                                 const pageid = edge.node.pageAttributes.pageid;
-                                const body = edge && edge.node ? htmlToText(stripLinks(edge.node.html)) : '';
+                                const body =
+                                    edge && edge.node
+                                        ? htmlToText(stripLinks(edge.node.html))
+                                        : '';
                                 return {
                                     pageid,
                                     body,
@@ -228,8 +237,17 @@ module.exports = {
                             .filter((edge) => edge.node.extension === 'html')
                             .map((edge) => {
                                 const pageid = edge.node.name;
-                                const body = edge && edge.node && edge.node.childHtmlRehype ?
-                                            htmlToText(stripLinks(edge.node.childHtmlRehype.html)) : ''
+                                const body =
+                                    edge &&
+                                    edge.node &&
+                                    edge.node.childHtmlRehype
+                                        ? htmlToText(
+                                              stripLinks(
+                                                  edge.node.childHtmlRehype
+                                                      .html,
+                                              ),
+                                          )
+                                        : '';
                                 return {
                                     body,
                                     pageid,
