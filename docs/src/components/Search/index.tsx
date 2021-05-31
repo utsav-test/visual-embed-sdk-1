@@ -189,10 +189,12 @@ const Search: React.FC<SearchProps> = (props) => {
                 )}
             </div>
             {props.isMaxMobileResolution && (
-                <ToggleButton
-                    setDarkMode={props.setDarkMode}
-                    isDarkMode={props.isDarkMode}
-                />
+                <div className="ml-4">
+                    <ToggleButton
+                        setDarkMode={props.setDarkMode}
+                        isDarkMode={props.isDarkMode}
+                    />
+                </div>
             )}
         </div>
     );
