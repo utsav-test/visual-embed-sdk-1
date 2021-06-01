@@ -31,24 +31,6 @@ audio:not([controls]) {
   display: none;
 }
 
-
-@font-face {
-  font-family: 'Optimo-Plain';
-  src: url('../fonts/Plain-Medium.otf') format('opentype');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Optimo-Plain';
-  src: url('../fonts/Plain-Light.otf') format('opentype');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-
 /* ==========================================================================
  * * Base
  * * ========================================================================== */
@@ -64,14 +46,14 @@ html {
   /* 2 */
   -webkit-text-size-adjust: 100%;
   /* 2 */
-  font-family: 'Optimo-Plain';
+  font-family: sans-serif;
 }
 
 /**
  * * Address `font-family` inconsistency between `textarea` and other form
  * * elements. */
 button, input, select, textarea {
-  font-family: 'Optimo-Plain';
+  font-family: sans-serif;
 }
 
 /**
@@ -1604,10 +1586,9 @@ ul.tsd-descriptions > li > :last-child > :last-child > :last-child,
 }
 body {
   background: #fdfdfd;
-  font-family: 'Optimo-Plain';
+  font-family: "Segoe UI", sans-serif;
   font-size: 16px;
   color: #222;
-  font-weight: 300;
 }
 
 a {
