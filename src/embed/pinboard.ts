@@ -69,7 +69,7 @@ export class PinboardEmbed extends V1Embed {
             fullHeight,
         } = this.viewConfig;
 
-        if(fullHeight === true) {
+        if (fullHeight === true) {
             params[Param.fullHeight] = true;
         }
         if (disabledActions?.length) {
