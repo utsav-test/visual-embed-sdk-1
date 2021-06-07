@@ -51,7 +51,7 @@ export interface AppViewConfig extends ViewConfig {
      */
     showPrimaryNavbar?: boolean;
     /**
-     * If true, help and profile buttons will hide on NavBar. By default, 
+     * If true, help and profile buttons will hide on NavBar. By default,
      * they are shown.
      */
     disableProfileAndHelp?: boolean;
