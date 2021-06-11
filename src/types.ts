@@ -341,6 +341,7 @@ export enum Param {
     Tag = 'tag',
     searchTokenString = 'searchTokenString',
     executeSearch = 'executeSearch',
+    fullHeight = 'isFullHeightPinboard',
 }
 
 /**
@@ -404,4 +405,5 @@ export enum Action {
     EditMeasure = 'context-menu-item-edit-measure',
     Separator = 'context-menu-item-separator',
     DrillDown = 'DRILL',
+    RequestAccess = 'requestAccess',
 }
