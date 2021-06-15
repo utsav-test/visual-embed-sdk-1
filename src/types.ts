@@ -406,6 +406,6 @@ export enum Action {
     Separator = 'context-menu-item-separator',
     DrillDown = 'DRILL',
     RequestAccess = 'requestAccess',
-    ShowQueryVisualizer = 'showQueryVisualizer',
-    ShowQuerySQLOption = 'showQuerySQLOption',
+    HideQueryVisualizer = 'hideQueryVisualizer',
+    HideQuerySQLOption = 'hideQuerySQLOption',
 }
