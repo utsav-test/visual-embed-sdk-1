@@ -38,9 +38,6 @@
 * Custom link format
 ** link:{{navprefix}}=customize-links[Customize links]
 
-* Custom link format
-** link:{{navprefix}}=customize-links[Customize links]
-
 * REST APIs
 ** link:{{navprefix}}=rest-apis[Overview]
 ** link:{{navprefix}}=rest-api-getstarted[Get started]
