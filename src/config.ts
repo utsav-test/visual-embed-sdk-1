@@ -50,6 +50,12 @@ export const getV2BasePath = (config: EmbedConfig): string => {
     }
 
     const tsHost = getThoughtSpotHost(config);
+
+    // This is to handle when e2e's for Search is run on pods for comp-blink-test-pipeline
+    // with baseUrl=https://localhost:8443.
+    if (tsHost.includes('https://localhost:8443')) {
+        return 'v2';
+    }
     // This is to handle when the developer is developing in their local environment.
     if (tsHost.includes('://localhost')) {
         return '';
