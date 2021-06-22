@@ -53,7 +53,6 @@ For a pinboard, the URL is as follows:
 ----
 https://<ThoughtSpot-host>/callosum/v1/tspublic/v1/pinboarddata?id=<pinboard_id>
 ----
-
 +
 For a visualization, the URL is as follows:
 
@@ -61,7 +60,13 @@ For a visualization, the URL is as follows:
 ----
 https://<ThoughtSpot-host>/callosum/v1/tspublic/v1/pinboarddata?id=<pinboard_id>&vizid=%5B<visualization_id>%5D
 ----
++
+[NOTE]
+====
+Make sure you add brackets around the `vizid` parameter. The URL encoding for the opening bracket is `%5B` and the closing bracket is `%5D`. 
+====
 
++
 . To apply filters to the data, use runtime filters.
 
 +
@@ -86,9 +91,12 @@ Runtime filters allow you to apply filters to the data returned by the APIs. The
 
 ===== Runtime filter operators
 You can use the following operators when applying Runtime filters on a visualization or pinboard.
+
 [width="50%" cols="1,2,1"]
 [options='header']
 |===
+|Operator|Description|Number of Values
+
 | `EQ`
 | equals
 | 1
@@ -142,7 +150,7 @@ You can use the following operators when applying Runtime filters on a visualiza
 | 2
 |===
 
-==== Supported data types
+===== Supported data types
 You can use runtime filters on these data types:
 
 * VARCHAR
@@ -155,7 +163,6 @@ You can use runtime filters on these data types:
 * DATE_TIME
 * TIME
 
-
 [IMPORTANT]
 ====
 The `DATE` and `DATE_TIME` data type requires you to provide the date and time values in the Epoch time format, The Epoch time is also referred POSIX or Unix time. The Epoch timestamp is always in GMT/UTC time. You may have to convert time zones to calculate the appropriate timestamp.
@@ -166,8 +173,6 @@ For example, if you want to filter data for 2020-05-22, you can specify the date
 new Date('2020-05-22').getTime() / 1000
 ----
 ====
-
-
 ==== Apply runtime filters to a visualization
 
 To apply runtime filters to a pinboard, use the following format in the REST API call:
@@ -218,5 +223,3 @@ It shows that data values are returned as epoch.
 ====
 Runtime Filters can also be applied on visualizations or pinboards embedded in your application. You can specify the runtime filter criteria in the SDK when embedding ThoughtSpot objects. For more information, see xref:embed-a-viz.adoc[Embed a visualization] and xref:embed-pinboard.adoc[Embed a pinboard].
 ====
-
-
