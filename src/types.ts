@@ -90,6 +90,14 @@ export interface EmbedConfig {
 
     /** @internal */
     basepath?: string;
+
+    /**
+     * Should we encode URL Query Params using base64 encoding which thoughtspot
+     * will generate for embedding. This provides additional security to
+     * thoughtspot clusters against Cross site scripting attacks.
+     * @default false
+     */
+    shouldEncodeUrlQueryParams?: boolean;
 }
 
 export type MessagePayload = { type: string; data: any };
@@ -330,8 +338,10 @@ export enum DataSourceVisualMode {
 export enum Param {
     DataSources = 'dataSources',
     DataSourceMode = 'dataSourceMode',
+    ExpandAllDataSource = 'expandAllDataSource',
     DisableActions = 'disableAction',
     DisableActionReason = 'disableHint',
+    ForceTable = 'forceTable',
     SearchQuery = 'searchQuery',
     HideActions = 'hideAction',
     EnableVizTransformations = 'enableVizTransform',
@@ -406,4 +416,20 @@ export enum Action {
     Separator = 'context-menu-item-separator',
     DrillDown = 'DRILL',
     RequestAccess = 'requestAccess',
+}
+
+export interface SessionInterface {
+    sessionId: string;
+    genNo: number;
+    acSession: { sessionId: string; genNo: number };
+}
+
+// eslint-disable-next-line no-shadow
+export enum OperationType {
+    GetChartWithData = 'GetChartWithData',
+    GetTableWithHeadlineData = 'GetTableWithHeadlineData',
+}
+
+export interface AnswerServiceType {
+    getAnswer?: (offset: number, batchSize: number) => any;
 }

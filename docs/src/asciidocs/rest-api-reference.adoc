@@ -8,33 +8,39 @@
 
 Use the following REST APIs for programmatically managing users, groups, sessions, and embedding data.
 
-[width="80%" cols="1,2,2"]
-[options='header']
-|====
-|API service|Request URL|Description
-.5+|xref:user-api.adoc[User]|`*GET* /tspublic/v1/user/list`|Get all users, groups, and their inter-dependencies.
-|`*POST* /tspublic/v1/user/updatepassword`|Change the password of a user account.
-|`*POST* /tspublic/v1/user/transfer/ownership`|Transfer ownership of all objects from one user to another.
-|`*POST* /tspublic/v1/user/sync`|Synchronize principal from your client application with ThoughtSpot.
-|`*POST* /tspublic/v1/user/updatepreference`|Modify a user profile.
-.2+|xref:group-api.adoc[Group]|`*POST* /tspublic/v1/group/addprivilege` |Add a privilege to a group.
-|`*POST*/tspublic/v1/group/removeprivilege` |Remove a privilege from a group.
-.4+|xref:session-api.adoc[Session]|`*POST* /tspublic/v1/session/login` |Authenticate and login a user.
-|`*POST* /tspublic/v1/session/logout`|Log out a user from an existing session.
-|`*POST* /tspublic/v1/session/auth/token`|Obtain an authentication token for a user.
-|`*GET* /tspublic/v1/session/login/token`|Log in an authenticated user when trusted authentication is enabled.
+== Session management
 
-|xref:pinboarddata.adoc[Pinboard Data]|`*POST* /tspublic/v1/pinboarddata`|Fetch the pinboard data from the ThoughtSpot application.
-|xref:pinboard-export-api.adoc[Pinboard export]|`*POST* /tspublic/v1/export/pinboard/pdf`|Download a pinboard or specific visualizations from a pinboard as a PDF file.
-.4+|xref:metadata-api.adoc[Metadata]|
-`*GET* /tspublic/v1/metadata/listobjectheaders`|List the metadata object headers in the repository.
-|`*GET* /tspublic/v1/metadata/listvizheaders`|Get the visualization headers from the ThoughtSpot system.
-|`*GET* /tspublic/v1/metadata/listas`|Get a list of metadata objects for a user or user group.
-|`*POST* /tspublic/v1/metadata/assigntag`|Assign tags to a metadata object such as a pinboard, search answer, table, worksheet, or view.
-.2+|xref:tml-api.adoc[TML API]| `*POST* /tspublic/v1/metadata/tml/import`|Imports ThoughtSpot Modeling Language (TML) objects.
-|`*POST* /tspublic/v1/metadata/tml/export`|Exports ThoughtSpot Modeling Language (TML) objects.
-|xref:search-data-api.adoc[Search data]|`*POST* /tspublic/v1/searchdata`|Search data from a specific data source in the ThoughtSpot application.
-.2+|xref:security-api.adoc[Security]
-|`*POST* /tspublic/v1/security/share`|Share ThoughtSpot objects with another user or user group.
-|`*POST* /tspublic/v1/security/shareviz`|Share a specific ThoughtSpot visualization with another user or user group.
-|====
+include::{path}/session-api-list.adoc[]
+
+== User management
+
+include::{path}/user-api-list.adoc[]
+
+== User group management
+
+include::{path}/group-api-list.adoc[]
+
+== Metadata management
+
+include::{path}/metadata-api-list.adoc[]
+
+== TML objects
+
+include::{path}/tml-api-list.adoc[]
+
+== Pinboard data
+
+include::{path}/pinboard-api-list.adoc[]
+
+
+== Search data
+[width="100%" cols="1,3,3"]
+[options="header"]
+|===
+||Resource endpoint|Operation
+||`xref:search-data-api.adoc[**POST** /tspublic/v1/searchdata]`|Search data from a specific data source in the ThoughtSpot application.
+|===
+
+== Security
+
+include::{path}/security-api-list.adoc[]

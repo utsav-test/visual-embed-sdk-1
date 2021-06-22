@@ -49,9 +49,17 @@ export interface SearchViewConfig extends ViewConfig {
      */
     hideResults?: boolean;
     /**
+     * If set to true, expands all the data sources panel.
+     */
+    expandAllDataSource?: boolean;
+    /**
      * If set to true, the Search Assist feature is enabled.
      */
     enableSearchAssist?: boolean;
+    /**
+     *
+     */
+    forceTable?: boolean;
     /**
      * The array of data source GUIDs to set on load.
      */
@@ -119,7 +127,9 @@ export class SearchEmbed extends TsEmbed {
             disabledActionReason,
             hiddenActions,
             hideResults,
+            expandAllDataSource,
             enableSearchAssist,
+            forceTable,
             searchOptions,
         } = this.viewConfig;
         const answerPath = answerId ? `saved-answer/${answerId}` : 'answer';
@@ -145,6 +155,9 @@ export class SearchEmbed extends TsEmbed {
         if (hideResults) {
             queryParams[Param.HideResult] = true;
         }
+        if (expandAllDataSource) {
+            queryParams[Param.ExpandAllDataSource] = true;
+        }
         if (disabledActions?.length) {
             queryParams[Param.DisableActions] = disabledActions;
         }
@@ -153,6 +166,9 @@ export class SearchEmbed extends TsEmbed {
         }
         if (hiddenActions?.length) {
             queryParams[Param.HideActions] = hiddenActions;
+        }
+        if (forceTable) {
+            queryParams[Param.ForceTable] = true;
         }
 
         queryParams[Param.DataSourceMode] = this.getDataSourceMode();

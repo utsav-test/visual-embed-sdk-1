@@ -7,7 +7,7 @@
  * @author Ayon Ghosh <ayon.ghosh@thoughtspot.com>
  */
 
-import { getCssDimension } from '../utils';
+import { getEncodedQueryParamsString, getCssDimension } from '../utils';
 import {
     getThoughtSpotHost,
     URL_MAX_LENGTH,
@@ -24,6 +24,7 @@ import {
     AuthType,
     Action,
     RuntimeFilter,
+    OperationType,
 } from '../types';
 import { authenticate, isAuthenticated } from '../auth';
 import {
@@ -31,6 +32,7 @@ import {
     uploadMixpanelEvent,
     MIXPANEL_EVENT,
 } from '../mixpanel-service';
+import { processData } from '../utils/processData';
 
 let config = {} as EmbedConfig;
 
@@ -174,6 +176,14 @@ export class TsEmbed {
      */
     private isError: boolean;
 
+    /**
+     * Should we encode URL Query Params using base64 encoding which thoughtspot
+     * will generate for embedding. This provides additional security to
+     * thoughtspot clusters against Cross site scripting attacks.
+     * @default false
+     */
+    private shouldEncodeUrlQueryParams = false;
+
     constructor(domSelector: DOMSelector, viewConfig?: ViewConfig) {
         this.el = this.getDOMNode(domSelector);
         // TODO: handle error
@@ -182,6 +192,7 @@ export class TsEmbed {
         this.eventHandlerMap = new Map();
         this.isError = false;
         this.viewConfig = viewConfig;
+        this.shouldEncodeUrlQueryParams = config.shouldEncodeUrlQueryParams;
     }
 
     /**
@@ -234,7 +245,10 @@ export class TsEmbed {
         window.addEventListener('message', (event) => {
             const eventType = this.getEventType(event);
             if (event.source === this.iFrame.contentWindow) {
-                this.executeCallbacks(eventType, event.data);
+                this.executeCallbacks(
+                    eventType,
+                    processData(event.data, this.thoughtSpotHost),
+                );
             }
         });
     }
@@ -243,6 +257,11 @@ export class TsEmbed {
      * Constructs the base URL string to load the ThoughtSpot app.
      */
     protected getEmbedBasePath(queryString: string): string {
+        if (this.shouldEncodeUrlQueryParams) {
+            queryString = `?base64UrlEncodedFlags=${getEncodedQueryParamsString(
+                queryString.substr(1),
+            )}`;
+        }
         const basePath = [
             this.thoughtSpotHost,
             this.thoughtSpotV2Base,
@@ -264,13 +283,20 @@ export class TsEmbed {
     protected getV1EmbedBasePath(
         queryString: string,
         showPrimaryNavbar = false,
+        disableProfileAndHelp = false,
         isAppEmbed = false,
     ): string {
         const queryStringFrag = queryString ? `&${queryString}` : '';
         const primaryNavParam = `&primaryNavHidden=${!showPrimaryNavbar}`;
-        const queryParams = `?embedApp=true${
-            isAppEmbed ? primaryNavParam : ''
+        const disableProfileAndHelpParam = `&profileAndHelpInNavBarHidden=${disableProfileAndHelp}`;
+        let queryParams = `?embedApp=true${isAppEmbed ? primaryNavParam : ''}${
+            isAppEmbed ? disableProfileAndHelpParam : ''
         }${queryStringFrag}`;
+        if (this.shouldEncodeUrlQueryParams) {
+            queryParams = `?base64UrlEncodedFlags=${getEncodedQueryParamsString(
+                queryParams.substr(1),
+            )}`;
+        }
         let path = `${this.thoughtSpotHost}/${queryParams}#`;
         if (!isAppEmbed) {
             path = `${path}/embed`;
@@ -308,6 +334,7 @@ export class TsEmbed {
 
         authPromise
             ?.then(() => {
+                uploadMixpanelEvent(MIXPANEL_EVENT.VISUAL_SDK_RENDER_COMPLETE);
                 this.executeCallbacks(EmbedEvent.AuthInit, {
                     data: { isLoggedIn: isAuthenticated() },
                 });
@@ -353,6 +380,7 @@ export class TsEmbed {
                 this.subscribeToEvents();
             })
             .catch((error) => {
+                uploadMixpanelEvent(MIXPANEL_EVENT.VISUAL_SDK_RENDER_FAILED);
                 this.handleError(error);
             });
     }
