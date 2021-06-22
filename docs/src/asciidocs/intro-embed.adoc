@@ -12,7 +12,7 @@ ThoughtSpot provides the Visual Embed SDK to programmatically embed search-drive
 == Embedding methods
 You can use one of the following methods to embed ThoughtSpot into your host application:
 ////
-* *Using iFrames via ThoughtSpot UI*::In this method, you can copy the embed link for a pinboard or visualization from the ThoughtSpot UI and add it your webpage or an HTML file. For more information, see Embedding a Pinboard or Visualization.
+* *Using iFrames via ThoughtSpot UI*::In this method, you can copy the embed link for a pinboard or visualization from the ThoughtSpot UI and add it your webpage, or an HTML file. For more information, see Embedding a Pinboard or Visualization.
 ////
 *Using the Visual Embed SDK*::
 You can install the Visual Embed SDK, import the Javascript library, and programmatically integrate ThoughtSpot application and its components.
