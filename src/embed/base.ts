@@ -453,13 +453,19 @@ export class TsEmbed {
         messageType: HostEvent,
         data: any,
     ): typeof TsEmbed.prototype {
-        this.iFrame.contentWindow.postMessage(
-            {
-                type: messageType,
-                data,
-            },
-            this.thoughtSpotHost,
-        );
+        if (messageType === HostEvent.Reload) {
+            this.reload();
+        } else {
+            this.iFrame.contentWindow.postMessage(
+                {
+                    type: messageType,
+                    data,
+                },
+                this.thoughtSpotHost,
+            );
+        }
+
+        uploadMixpanelEvent(`${MIXPANEL_EVENT.VISUAL_SDK_TRIGGER}-${messageType}`);
 
         return this;
     }
@@ -474,6 +480,16 @@ export class TsEmbed {
         this.isRendered = true;
 
         return this;
+    }
+
+    /**
+     * Reloads the ThoughtSpot iframe.
+     */
+    protected reload() {
+        const oldFrame = this.iFrame.cloneNode();
+        const parent = this.iFrame.parentNode;
+        parent.removeChild(this.iFrame);
+        parent.appendChild(oldFrame);
     }
 }
 
