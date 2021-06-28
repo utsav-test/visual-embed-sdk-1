@@ -8,10 +8,12 @@ on:
     branches:
     # Push events on `main` branch
       - main
-    paths: 
-    - 'static/typedoc/**'
-    - 'docs/src/**'
-    - 'gatsby-config.js'
+      - '^[0-9]+.[0-9]+.[0-9]+$'
+      - 7.1.x
+    # paths: 
+    # - 'static/typedoc/**'
+    # - 'docs/src/**'
+    # - 'gatsby-config.js'
   
   # For manually triggering the build
   workflow_dispatch:
@@ -42,6 +44,19 @@ jobs:
         if: ${{ env.BRANCH_NAME == 'main' }}
         run: echo "BUILD_ENV=DEV" >> $GITHUB_ENV
 
+      # Check the branch is new release versions
+      - name: Check branch name for release versions
+        id: check-release-brnch-version
+        run: |
+          if [[ ${{ env.BRANCH_NAME }} =~ ^[0-9]+.[0-9]+.[0-9]+$ || ${{ env.BRANCH_NAME }} == 7.1.x ]]; then
+              echo ::set-output name=match::true
+          fi
+
+      # Add build env for release versions
+      - name: Add build Env for Prod
+        if: steps.check-release-brnch-version.outputs.match == 'true'
+        run: echo "BUILD_ENV=PROD" >> $GITHUB_ENV
+
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
@@ -58,20 +73,30 @@ jobs:
       - name: build
         run: npm run build:gatsby
         
-      # Deploy on github pages for Dev env
-      - name: publish-dev
-        uses: peaceiris/actions-gh-pages@v3
-        if: ${{ env.BRANCH_NAME == 'main' }}
+      # extract destination dir
+      - name: Extract destination dir name
+        id: extract_destination_dir
+        uses: actions/github-script@v4
+        if: steps.check-release-brnch-version.outputs.match == 'true'
+        env:
+          BRANCH_NAME: '${{env.BRANCH_NAME}}'
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
-          destination_dir: ./dev
+          script: |
+            const branch = process.env.BRANCH_NAME
+            if (branch === 'release') {
+              return 'release'
+            }
+            if (branch === 'main') {
+              return 'dev'
+            }
+            const dir = branch.match(/[0-9]+.[0-9]+/).toString()
+            return dir
 
-      # Deploy on github pages for Prod env
-      - name: publish-release
+      # Deploy on github pages
+      - name: publish-release-version
         uses: peaceiris/actions-gh-pages@v3
-        if: ${{ env.BRANCH_NAME == 'release' }}
+        if: steps.check-release-brnch-version.outputs.match == 'true'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
-          destination_dir: ./release
+          destination_dir: ./${{ steps.extract_destination_dir.outputs.result }}
