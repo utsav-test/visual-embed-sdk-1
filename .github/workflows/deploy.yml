@@ -51,28 +51,7 @@ jobs:
           if [[ ${{ env.BRANCH_NAME }} =~ ^[0-9]+.[0-9]+.[0-9]+$ || ${{ env.BRANCH_NAME }} == 7.1.x ]]; then
               echo ::set-output name=match::true
           fi
-
-      # Add build env for release versions
-      - name: Add build Env for Prod
-        if: steps.check-release-brnch-version.outputs.match == 'true'
-        run: echo "BUILD_ENV=PROD" >> $GITHUB_ENV
-
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      # Use NodeJS v12.18.3
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '12.18.3'
-
-      # Run npm install
-      - name: Run npm install
-        run: npm install
-
-      # Deploy on github pages
-      - name: build
-        run: npm run build:gatsby
-        
+      
       # extract destination dir
       - name: Extract destination dir name
         id: extract_destination_dir
@@ -92,6 +71,29 @@ jobs:
             const dir = branch.match(/[0-9]+.[0-9]+/).toString()
             return dir
 
+      # Add build env for release versions
+      - name: Add build Env for Prod
+        if: steps.check-release-brnch-version.outputs.match == 'true'
+        run: |
+          echo "BUILD_ENV=PROD_VERSIONING" >> $GITHUB_ENV
+          echo "BUILD_DIR=${{ steps.extract_destination_dir.outputs.result }}" >> $GITHUB_ENV
+
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Use NodeJS v12.18.3
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '12.18.3'
+
+      # Run npm install
+      - name: Run npm install
+        run: npm install
+
+      # Deploy on github pages
+      - name: build
+        run: npm run build:gatsby
+        
       # Deploy on github pages
       - name: publish-release-version
         uses: peaceiris/actions-gh-pages@v3
