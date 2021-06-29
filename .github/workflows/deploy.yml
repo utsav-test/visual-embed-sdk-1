@@ -9,11 +9,10 @@ on:
     # Push events on `main` branch
       - main
       - '^[0-9]+.[0-9]+.[0-9]+$'
-      - 7.1.x
-    # paths: 
-    # - 'static/typedoc/**'
-    # - 'docs/src/**'
-    # - 'gatsby-config.js'
+    paths: 
+    - 'static/typedoc/**'
+    - 'docs/src/**'
+    - 'gatsby-config.js'
   
   # For manually triggering the build
   workflow_dispatch:
@@ -48,7 +47,7 @@ jobs:
       - name: Check branch name for release versions
         id: check-release-brnch-version
         run: |
-          if [[ ${{ env.BRANCH_NAME }} =~ ^[0-9]+.[0-9]+.[0-9]+$ || ${{ env.BRANCH_NAME }} == 7.1.x ]]; then
+          if [[ ${{ env.BRANCH_NAME }} =~ ^[0-9]+.[0-9]+.[0-9]+$ ]]; then
               echo ::set-output name=match::true
           fi
       
@@ -56,7 +55,6 @@ jobs:
       - name: Extract destination dir name
         id: extract-destination-dir
         uses: actions/github-script@v4
-        if: steps.check-release-brnch-version.outputs.match == 'true'
         env:
           BRANCH_NAME: '${{env.BRANCH_NAME}}'
         with:
@@ -97,7 +95,6 @@ jobs:
       # Deploy on github pages
       - name: publish-release-version
         uses: peaceiris/actions-gh-pages@v3
-        if: steps.check-release-brnch-version.outputs.match == 'true'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
