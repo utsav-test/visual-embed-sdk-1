@@ -54,7 +54,7 @@ jobs:
       
       # extract destination dir
       - name: Extract destination dir name
-        id: extract_destination_dir
+        id: extract-destination-dir
         uses: actions/github-script@v4
         if: steps.check-release-brnch-version.outputs.match == 'true'
         env:
@@ -76,7 +76,7 @@ jobs:
         if: steps.check-release-brnch-version.outputs.match == 'true'
         run: |
           echo "BUILD_ENV=PROD_VERSIONING" >> $GITHUB_ENV
-          echo "BUILD_DIR=${{steps.extract_destination_dir.outputs.result}}" >> $GITHUB_ENV
+          echo "BUILD_DIR=${{steps.extract-destination-dir.outputs.result}}" >> $GITHUB_ENV
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
@@ -101,4 +101,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
-          destination_dir: ./${{ env.BUILD_DIR }}
+          destination_dir: ./${{ steps.extract-destination-dir.outputs.result }}
