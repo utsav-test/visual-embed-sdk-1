@@ -63,13 +63,13 @@ jobs:
           script: |
             const branch = process.env.BRANCH_NAME
             if (branch === 'release') {
-              return './release'
+              return 'release'
             }
             if (branch === 'main') {
-              return './dev'
+              return 'dev'
             }
             const dir = branch.match(/[0-9]+.[0-9]+/).toString()
-            return `./${dir}`
+            return "7.1"
 
       # Add build env for release versions
       - name: Add build Env for Prod
@@ -101,4 +101,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
-          destination_dir: ${{ steps.extract_destination_dir.outputs.result }}
+          destination_dir: ./${{ steps.extract_destination_dir.outputs.result }}
