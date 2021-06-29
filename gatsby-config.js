@@ -5,6 +5,7 @@ const { htmlToText } = require('html-to-text');
 const buildEnv = process.env.BUILD_ENV || config.BUILD_ENVS.LOCAL; // Default build env
 
 const getPathPrefix = () => {
+console.log('=========buildEnv', buildEnv)
     switch (buildEnv) {
         case config.BUILD_ENVS.PROD:
             return config.DEPLOY_ENVS.RELEASE;
